@@ -1,0 +1,10 @@
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\obj\Debug\ResolveAssemblyReference.cache
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\obj\Debug\UC2000Com.csproj.GenerateResource.Cache
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\bin\Debug\UC2000Com.exe.config
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\obj\Debug\UC2000Com.Properties.Resources.resources
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\obj\Debug\UC2000Com.Resource1.resources
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\obj\Debug\UC2000Com.UC2000Com.resources
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\bin\Debug\UC2000Com.exe
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\bin\Debug\UC2000Com.pdb
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\obj\Debug\UC2000Com.exe
+D:\Documents and Settings\rothe\My Documents\Visual Studio 2005\Projects\UCTest\UCTest\obj\Debug\UC2000Com.pdb
