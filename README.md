@@ -22,3 +22,5 @@ Very simple disassembler, but without which I would not have managed (Source cod
 Programs written by me. Now there's only Tetris, I have plans for custom watchfaces and maybe a couple more games.
 
 **./Transmitters**<br />
+Firmware sources for the PC -> Watch wireless interface, and the application for Windows based on http://www.sigma957.org/datagraph.html
+I will publish the device schemes a little later.
