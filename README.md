@@ -24,3 +24,7 @@ Programs written by me. Now there's only Tetris, I have plans for custom watchfa
 **./Transmitters**<br />
 Firmware sources for the PC -> Watch wireless interface, and the application for Windows based on http://www.sigma957.org/datagraph.html
 I will publish the device schemes a little later.
+
+
+[![Video](https://img.youtube.com/vi/BHnZNJsGcyE/0.jpg)](https://www.youtube.com/watch?v=BHnZNJsGcyE)
+
