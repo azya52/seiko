@@ -13,7 +13,7 @@ Manuals and other documents.
 Scans of ads and magazine cuttings.
 
 **./axasm**<br />
-Assembler for Seico Cal. UW01 (UW02), I used axasm by Al Williams (https://github.com/wd5gnr/axasm)
+Assembler for Seico Cal. UW01, I used axasm by Al Williams (https://github.com/wd5gnr/axasm)
 
 **./ucDisassembler**<br />
 Very simple disassembler, but without which I would not have managed (Source code of applications from the ROM are in ./rom/disassembled)
