@@ -189,8 +189,9 @@
 #define IO14 14
 #define IO15 15
 
-#define OS_CLRCB 0x8F2
-#define OS_COPY0BTOCB 0xBE7
+#define OS_CLRCB 0x8F2	//zero registers of the current bank
+#define OS_CLS 0xBE4 //clear screen
+#define OS_COPY0BTOCB 0xBE7 //copy 0 bank to current
 #define OS_PRINT0 0xBD0
 #define OS_PRINTLINE 0xBD7
 #define OS_PRINTDAY 0xBDD

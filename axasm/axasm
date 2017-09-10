@@ -76,9 +76,10 @@ if [ $# -lt 1 ]
 then usage
 fi
 
-LFILE=./temp/lfile
-CFILE=./temp/cfile
-XFILE=./temp/xfile
+mkdir -p $LIB/temp/
+LFILE=$LIB/temp/lfile
+CFILE=$LIB/temp/cfile
+XFILE=$LIB/temp/xfile
 rm -f $CFILE
 awk -f $LIB/soloinc.awk $1 | awk -f $LIB/solopre.awk -v PROC=$PROC -v LFILE=$LFILE  >$CFILE
 if gcc -I$LIB -x c -std=c99 $DEFOP -o $XFILE $LIB/soloasm.c $CFILE 
