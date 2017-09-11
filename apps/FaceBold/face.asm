@@ -1,15 +1,13 @@
 ##define curPosL RB5	
 ##define curPosH RB6
+##define currentFace RB7
 
 ##define drawValue RD0
+##define drawValueH RD1
 
-##define secAppendL RC0
-##define secAppendH RC1
-##define checkSecZero RC2
-
-##define bigDigitAdr RA2
-
-##define currentMode RA3
+##define sadrL RA0
+##define sadrM RA1
+##define sadrH RA2
 
 ##define bigDigitAdr2 ((((bigDigit & 0x3FF)*2)>>8) & 0x0F)
 ##define bigDigitAdr1 ((((bigDigit & 0x3FF)*2)>>4) & 0x0F)
@@ -31,20 +29,18 @@
 	JMP 0x0E0
 	JMP btn_mode	
 	JMP btn_transmit
-	JMP 0x2DF		
-	JMP 0x383		
+	JMP btn_right		
+	JMP btn_left	
 	JMP 0x2A9
 	JMP 0x307
 	JMP 0x39C
 	JMP 0x09B
 	JMP 0x98F
 	RET
-	RET
-	
 
 start:
 	CLRM RB1, RB3%8
-    LDI RB2, 0b1100
+    LDI RB2, 0b1111
     LCRB B0
 	LDI RB4, 2
 	JMP 0x227
@@ -59,19 +55,59 @@ btn_transmit:
 
 check_watch_screen:
 	LARB B0
-	LDI RB2, 0b1100
+	LDI RB2, 0b1111
 	MVCA RB3,RB4
 	CPI RB3, 0
 	JZ btn_mode_startapp
 	LDI RB3, 0b0000
 	RET
   btn_mode_startapp:
-	PLAI 125 
-	CALL OS_CLS
 	LDI RB3, 0b1000
 	JMP redraw
-		
+
+btn_right:
+	LCRB B3
+	LDI currentFace, 1
+	CALL redraw
+	;INC currentFace, currentFace%8
+	JMP 0x2DF
+	
+btn_left:
+	LCRB B3
+	LDI currentFace, 0
+	CALL redraw
+	;DEC currentFace, currentFace%8
+	JMP 0x383
+	
+tick:
+	LCRB B3
+	;ANDI currentFace, 0b01
+	IJMR currentFace
+	JMP tick_face0
+	JMP 0x190
+	
 redraw:
+	PLAI 125 
+	CALL OS_CLS
+
+	LCRB B3
+	;ANDI currentFace, 0b01
+	IJMR currentFace
+	JMP redraw_face0
+	RET
+	
+;
+; face big style
+;
+	
+tick_face0:
+	LCRB B0
+	CPI RB5, 0
+	JNZ seconds_face0
+	CPI RB6, 0
+	JNZ seconds_face0
+		
+redraw_face0:
 	LCRB B3
 	LARB B0
 	
@@ -95,15 +131,15 @@ redraw:
 	;hours
 	MVCA drawValue, RA2
 	CPI drawValue,10
-	JC e1
+	JC redraw_if0
 	PLAI 0                          ;draw
-	STLI 0xEE                       ;one
-	PLAI 10                         ;draw
-	STLI 0xE6                       ;one
-	PLAI 20                         ;draw
+	STLI 0xEE                      
+	PLAI 10                         
+	STLI 0xE6                     
+	PLAI 20                         
 	STLI 0xEA                       ;one
 	SBI drawValue, 10
-e1:
+  redraw_if0:
 	LDI curPosL, 1
 	LDI curPosH, 0
 	CALL drawBigDigit
@@ -113,8 +149,8 @@ e1:
 	MVCA drawValue, RA7
 	CALL drawDayOfWeek
 	LDI drawValue, 0xC
-	LDI drawValue+1, 0x2
-	STLM drawValue, (drawValue+1)%8
+	LDI drawValueH, 0x2
+	STLM drawValue, (drawValueH)%8
 	
 	;dayOfMonth
 	MVCA drawValue,RA5
@@ -123,62 +159,53 @@ e1:
 	MVCA drawValue,RA4
 	STL drawValue
 	
-	;Month
+	;month
 	PLAI 37
 	MVCA drawValue, RA6
 	CALL drawMonth
-	JMP 0x98F
 	
-tick:
+seconds_face0:
 	LCRB B3
 	LARB B0
+	
 	;seconds
-	LDI secAppendH, 8
-	LDI secAppendL, 0
 	MVCA drawValue,RB6
-	MOV checkSecZero, drawValue
-	LDI drawValue+1, 0
-	ADM secAppendL, drawValue+1
-	ADM secAppendL, drawValue+1
+	LDI drawValueH, 8	
+	ADD drawValue,drawValue
 	PLAI 8
-	STLM secAppendL, secAppendH%8
+	STLM drawValue, (drawValueH)%8
 	PLAI 18
-	INC secAppendL, (secAppendL+1)%8
-	STLM secAppendL, secAppendH%8
+	INC drawValue, (drawValueH)%8
+	STLM drawValue, (drawValueH)%8
 	
-	LDI secAppendH, 8
-	LDI secAppendL, 0
 	MVCA drawValue,RB5
-	ADD checkSecZero, drawValue
-	LDI drawValue+1, 0
-	ADM secAppendL, drawValue+1
-	ADM secAppendL, drawValue+1
+	ADD drawValue,drawValue
+	JNC tick_if0
+	INC drawValue+1, (drawValueH)%8
+  tick_if0:
 	PLAI 9
-	STLM secAppendL, secAppendH%8
+	STLM drawValue, (drawValueH)%8
 	PLAI 19
-	INC secAppendL, (secAppendL+1)%8
-	STLM secAppendL, secAppendH%8	
-	
-	CPI checkSecZero, 0
-	JZ redraw
+	INC drawValue, (drawValueH)%8
+	STLM drawValue, (drawValueH)%8
+
 	JMP 0x98F
 
-	
 drawBigDigit:
-	LDI bigDigitAdr, bigDigitAdr2
-	LDI bigDigitAdr-1, bigDigitAdr1
-	LDI bigDigitAdr-2, bigDigitAdr0
+	LDI sadrH, bigDigitAdr2
+	LDI sadrM, bigDigitAdr1
+	LDI sadrL, bigDigitAdr0
 	
-	CLRM drawValue+1, 2
-	ADM bigDigitAdr-2, drawValue+2
-	ADM bigDigitAdr-2, drawValue+2
+	CLRM drawValueH, (drawValueH+1)%8
+	ADM sadrL, drawValue+2
+	ADM sadrL, drawValue+2
 	
 	LDI drawValue, 4
-	LDI drawValue+1, 1
+	LDI drawValueH, 1
 	
   drawBigDigit_loop1:
 	PLAM curPosL, curPosH%8
-	PSAM bigDigitAdr-2,bigDigitAdr%8
+	PSAM sadrL,sadrH%8
 	CALL OS_PRINT0-2
 	
 	ADI curPosL, 10
@@ -186,43 +213,44 @@ drawBigDigit:
 	INC curPosH, curPosH%8
   drawBigDigit_if1:
   
-    ADM bigDigitAdr-2, drawValue+2
+    ADM sadrL, drawValue+2
 	CPI curPosH, 2
 	JNZ drawBigDigit_loop1
 	RET
 	
 drawDayOfWeek:
-	LDI bigDigitAdr, dayOfWeekAdr2
-	LDI bigDigitAdr-1, dayOfWeekAdr1
-	LDI bigDigitAdr-2, dayOfWeekAdr0
+	LDI sadrH, dayOfWeekAdr2
+	LDI sadrM, dayOfWeekAdr1
+	LDI sadrL, dayOfWeekAdr0
 	JMP drawLine3
 	
 drawMonth:
-	LDI bigDigitAdr, monthAdr2
-	LDI bigDigitAdr-1, monthAdr1
-	LDI bigDigitAdr-2, monthAdr0
+	LDI sadrH, monthAdr2
+	LDI sadrM, monthAdr1
+	LDI sadrL, monthAdr0
 	
 drawLine3:
-	CLRM drawValue+1, 2
-	ADM bigDigitAdr-2, drawValue+2
-	ADM bigDigitAdr-2, drawValue+2
-	ADM bigDigitAdr-2, drawValue+2
-	PSAM bigDigitAdr-2,bigDigitAdr%8
+	CLRM drawValueH, (drawValueH+1)%8
+	ADM sadrL, drawValue+2
+	ADM sadrL, drawValue+2
+	ADM sadrL, drawValue+2
+	PSAM sadrL,sadrH%8
 	CALL OS_PRINT0-3
 	RET
 	
 bigDigit:
+	;top
 	DW 0xF5EE	;0
 	DW 0x20EE	;1
 	DW 0xF5EE	;2
 	DW 0xF5EE	;3
 	DW 0xEEEE	;4
-	DW 0xF5FA	;5
+	DW 0xF5EE   ;FA	;5
 	DW 0xF5EE	;6
 	DW 0xF5EE	;7
 	DW 0xF5EE	;8
 	DW 0xF5EE	;9
-	
+	;middle
 	DW 0xE6E6	;0
 	DW 0x20E6	;1
 	DW 0xF5EA	;2
@@ -233,7 +261,7 @@ bigDigit:
 	DW 0x20E6	;7
 	DW 0xFEE6	;8
 	DW 0xF3E6	;9
-	
+	;bottom
 	DW 0xF3EA	;0
 	DW 0x20EA	;1
 	DW 0xF3EA	;2

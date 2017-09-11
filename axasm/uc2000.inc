@@ -124,7 +124,6 @@
 #define RET UC0(0xB000) 
 #define CPFJR(R,a) UCJ3(0xB400,R,0,a)
 #define IJMR(R) UC1_55(0xB800,R)
-#define IJMRX(R,s) UC2(0xB800,R,s)
 #define NOP UC0(0xBC00)
 #define JMP(l) UCJ12(0xC000,l)
 #define JZ(l) UCJ10(0xD000,l)
