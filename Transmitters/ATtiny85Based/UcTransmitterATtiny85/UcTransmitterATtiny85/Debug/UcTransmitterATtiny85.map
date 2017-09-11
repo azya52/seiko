@@ -480,13 +480,13 @@ END GROUP
  .debug_frame   0x00000000       0x54 main.o
  .debug_frame   0x00000054       0xfc softuart.o
 
-.debug_str      0x00000000      0x4f8
+.debug_str      0x00000000      0x4fd
  *(.debug_str)
  .debug_str     0x00000000      0x169 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.2.118/gcc/dev/attiny85/avr25/crtattiny85.o
- .debug_str     0x00000169      0x1e2 main.o
-                                0x21b (size before relaxing)
- .debug_str     0x0000034b      0x1ad softuart.o
-                                0x37b (size before relaxing)
+ .debug_str     0x00000169      0x1e7 main.o
+                                0x220 (size before relaxing)
+ .debug_str     0x00000350      0x1ad softuart.o
+                                0x380 (size before relaxing)
 
 .debug_loc      0x00000000      0x324
  *(.debug_loc)

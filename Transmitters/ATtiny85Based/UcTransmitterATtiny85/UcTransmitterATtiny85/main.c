@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#define PORT_COIL PB4
+#define COIL PB4
 #define TRANSM_FREQ 32768
 
 #include <avr/io.h>
@@ -34,7 +34,7 @@ void timer_init() {
 }
 
 void portes_init() {
-	DDRB = 0x01 << PORT_COIL;
+	DDRB = 0x01 << COIL;
 	PORTB = 0;
 }
 
@@ -51,10 +51,10 @@ void send(unsigned char b){
 		for (int i = 0; i < 16; i++) {
 			while ((unsigned char)(TCNT1-start) < SLEEP_CICLES);
 			start += SLEEP_CICLES;
-			PORTB |= sendBit << PORT_COIL;
+			PORTB |= sendBit << COIL;
 			while ((unsigned char)(TCNT1-start) < SLEEP_CICLES);
 			start += SLEEP_CICLES;
-			PORTB &= ~(1 << PORT_COIL);
+			PORTB &= ~(1 << COIL);
 		}
 		sendBit = !(sendWord & 0x01);
 		sendWord >>= 1;

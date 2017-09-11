@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000150  00000000  00000000  00001b28  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004f8  00000000  00000000  00001c78  2**0
+ 10 .debug_str    000004fd  00000000  00000000  00001c78  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000324  00000000  00000000  00002170  2**0
+ 11 .debug_loc    00000324  00000000  00000000  00002175  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000b8  00000000  00000000  00002494  2**0
+ 12 .debug_ranges 000000b8  00000000  00000000  00002499  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -105,7 +105,7 @@ void timer_init() {
 }
 
 void portes_init() {
-	DDRB = 0x01 << PORT_COIL;
+	DDRB = 0x01 << COIL;
   5e:	80 e1       	ldi	r24, 0x10	; 16
   60:	87 bb       	out	0x17, r24	; 23
 	PORTB = 0;
@@ -165,7 +165,7 @@ void send(unsigned char b){
   b0:	d4 f3       	brlt	.-12     	; 0xa6 <send+0x40>
 			start += SLEEP_CICLES;
   b2:	24 0f       	add	r18, r20
-			PORTB |= sendBit << PORT_COIL;
+			PORTB |= sendBit << COIL;
   b4:	88 b3       	in	r24, 0x18	; 24
   b6:	83 2b       	or	r24, r19
   b8:	88 bb       	out	0x18, r24	; 24
@@ -180,7 +180,7 @@ void send(unsigned char b){
   cc:	d4 f3       	brlt	.-12     	; 0xc2 <send+0x5c>
 			start += SLEEP_CICLES;
   ce:	24 0f       	add	r18, r20
-			PORTB &= ~(1 << PORT_COIL);
+			PORTB &= ~(1 << COIL);
   d0:	c4 98       	cbi	0x18, 4	; 24
   d2:	61 50       	subi	r22, 0x01	; 1
   d4:	71 09       	sbc	r23, r1
@@ -191,10 +191,10 @@ void send(unsigned char b){
 	while(sendWord){
 		for (int i = 0; i < 16; i++) {
   d6:	19 f7       	brne	.-58     	; 0x9e <send+0x38>
-			PORTB |= sendBit << PORT_COIL;
+			PORTB |= sendBit << COIL;
 			while ((unsigned char)(TCNT1-start) < SLEEP_CICLES);
 			start += SLEEP_CICLES;
-			PORTB &= ~(1 << PORT_COIL);
+			PORTB &= ~(1 << COIL);
 		}
 		sendBit = !(sendWord & 0x01);
   d8:	cf 01       	movw	r24, r30
@@ -215,7 +215,7 @@ void send(unsigned char b){
 		for (int i = 0; i < 16; i++) {
 			while ((unsigned char)(TCNT1-start) < SLEEP_CICLES);
 			start += SLEEP_CICLES;
-			PORTB |= sendBit << PORT_COIL;
+			PORTB |= sendBit << COIL;
   e8:	38 2f       	mov	r19, r24
   ea:	32 95       	swap	r19
   ec:	30 7f       	andi	r19, 0xF0	; 240
@@ -288,9 +288,9 @@ unsigned char softuart_transmit_busy( void )
  140:	90 91 68 00 	lds	r25, 0x0068	; 0x800068 <internal_tx_buffer+0x1>
  144:	80 ff       	sbrs	r24, 0
  146:	02 c0       	rjmp	.+4      	; 0x14c <__vector_10+0x32>
- 148:	c1 9a       	sbi	0x18, 1	; 24
+ 148:	c0 9a       	sbi	0x18, 0	; 24
  14a:	01 c0       	rjmp	.+2      	; 0x14e <__vector_10+0x34>
- 14c:	c1 98       	cbi	0x18, 1	; 24
+ 14c:	c0 98       	cbi	0x18, 0	; 24
  14e:	80 91 67 00 	lds	r24, 0x0067	; 0x800067 <internal_tx_buffer>
  152:	90 91 68 00 	lds	r25, 0x0068	; 0x800068 <internal_tx_buffer+0x1>
  156:	96 95       	lsr	r25
@@ -336,7 +336,7 @@ unsigned char softuart_transmit_busy( void )
  1c8:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <flag_rx_ready>
  1cc:	81 11       	cpse	r24, r1
  1ce:	10 c0       	rjmp	.+32     	; 0x1f0 <__vector_10+0xd6>
- 1d0:	b0 99       	sbic	0x16, 0	; 22
+ 1d0:	b1 99       	sbic	0x16, 1	; 22
  1d2:	2f c0       	rjmp	.+94     	; 0x232 <__vector_10+0x118>
  1d4:	81 e0       	ldi	r24, 0x01	; 1
  1d6:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <flag_rx_ready>
@@ -350,7 +350,7 @@ unsigned char softuart_transmit_busy( void )
  1f0:	80 91 65 00 	lds	r24, 0x0065	; 0x800065 <timer_rx_ctr.1796>
  1f4:	81 50       	subi	r24, 0x01	; 1
  1f6:	d9 f4       	brne	.+54     	; 0x22e <__vector_10+0x114>
- 1f8:	b0 9b       	sbis	0x16, 0	; 22
+ 1f8:	b1 9b       	sbis	0x16, 1	; 22
  1fa:	07 c0       	rjmp	.+14     	; 0x20a <__vector_10+0xf0>
  1fc:	90 91 64 00 	lds	r25, 0x0064	; 0x800064 <internal_rx_buffer.1798>
  200:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__data_end>
@@ -384,9 +384,9 @@ unsigned char softuart_transmit_busy( void )
  244:	10 92 6b 00 	sts	0x006B, r1	; 0x80006b <flag_tx_busy>
  248:	10 92 6c 00 	sts	0x006C, r1	; 0x80006c <flag_rx_ready>
  24c:	10 92 6d 00 	sts	0x006D, r1	; 0x80006d <flag_rx_off>
- 250:	c1 9a       	sbi	0x18, 1	; 24
- 252:	b9 9a       	sbi	0x17, 1	; 23
- 254:	b8 98       	cbi	0x17, 0	; 23
+ 250:	c0 9a       	sbi	0x18, 0	; 24
+ 252:	b8 9a       	sbi	0x17, 0	; 23
+ 254:	b9 98       	cbi	0x17, 1	; 23
  256:	9f b7       	in	r25, 0x3f	; 63
  258:	f8 94       	cli
  25a:	89 e8       	ldi	r24, 0x89	; 137
