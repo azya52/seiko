@@ -27,6 +27,7 @@
 
 // We assume the first ORG is the lowest address
 #define ORG(n) unsigned int genasm(int _solo_pass) { \
+   unsigned preDATAadr=0;\
    unsigned tmp=0;\
    unsigned dbi=0;\
    unsigned _solo_add=n;\
@@ -39,26 +40,18 @@
 #define END _solo_info.end=_solo_add-1; return _solo_add; }
 
 #define DEFLABEL(l) static unsigned l
-#define LABEL(l) l=_solo_add+0xC00
+#define LABEL(l) if(dbi==1) DATA(0); l=_solo_add+0xC00; 
 #define DW(n) _solo_info.ary[_solo_add++]=(n)
-#define DS(s) tmp=0;\
-	while(s[tmp]!=0) {\
-		_solo_info.ary[_solo_add]=(s[tmp]<<8);\
-		tmp++;\
-		if(s[tmp]!=0){\
-			_solo_info.ary[_solo_add]|=(s[tmp]);\
-			tmp++;\
-		}\
-		_solo_add++;\
-	}\
-	
-#define DB(n) if(dbi==1) {\
+
+#define DATA(n) if(dbi==1) {\
 		_solo_info.ary[_solo_add++]|=n;\
 		dbi--;\
 	} else {\
 		_solo_info.ary[_solo_add]=n<<8;\
 		dbi++;\
 	}\
+	
+#define DB(n) DATA(n)
 
 #define CHKSIZE(n,bits) if (n>>bits) fprintf(stderr,"Warning: value %04X out of range at %04d\n",n,_solo_add)
 #define UC0(op) _solo_info.ary[_solo_add++]=op

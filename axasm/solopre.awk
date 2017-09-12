@@ -95,7 +95,7 @@ BEGIN {
      mac=toupper($op);
      $op="";
 # unpacked string
-     if (mac=="STRING") {
+     if (mac=="DS") {
 	 $op="";
 	 strng=withsemi 
 	 first=0;
@@ -106,7 +106,7 @@ BEGIN {
 		 break;
 	     }
 	     if (!first) continue;
-	     v=substr(strng,i,1);
+	     v=substr(strng,i,1);     
 #	     if (v=="\\") { v=substr(strng,i,2); i++; }
 # handle \xNN \DDD or \C
 	     if (v=="\\") {
@@ -135,7 +135,7 @@ BEGIN {
 		 
 		 
 	     }
-	     print "\tDATA('" v "');"
+	     print "DATA('" v "');"
 
 	 }
 	 next;
@@ -195,7 +195,7 @@ BEGIN {
 	 next;
      }
 # just some generic monadic macro or one with arguments
-     if ($(op+1)=="") print(mac ";"); else  print(mac  "("  $0   ");");
+     if ($(op+1)=="") print(mac ";"); else print(mac  "("  $0  ");");
    }
 
 

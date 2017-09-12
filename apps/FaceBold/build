@@ -1,1 +1,0 @@
-../../axasm/axasm -o face.bin face.asm

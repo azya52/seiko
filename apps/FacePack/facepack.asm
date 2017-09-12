@@ -9,6 +9,14 @@
 ##define sadrM RA1
 ##define sadrH RA2
 
+##define adderL RB0
+##define adderM RB1
+##define adderH RB2
+
+##define textTimeAdr2 ((((textTime & 0x3FF)*2)>>8) & 0x0F)
+##define textTimeAdr1 ((((textTime & 0x3FF)*2)>>4) & 0x0F)
+##define textTimeAdr0 ((((textTime & 0x3FF)*2)   ) & 0x0F)
+
 ##define bigDigitAdr2 ((((bigDigit & 0x3FF)*2)>>8) & 0x0F)
 ##define bigDigitAdr1 ((((bigDigit & 0x3FF)*2)>>4) & 0x0F)
 ##define bigDigitAdr0 ((((bigDigit & 0x3FF)*2)   ) & 0x0F)
@@ -67,39 +75,39 @@ check_watch_screen:
 
 btn_right:
 	LCRB B3
-	LDI currentFace, 1
+	INC currentFace, currentFace%8
 	CALL redraw
-	;INC currentFace, currentFace%8
 	JMP 0x2DF
 	
 btn_left:
 	LCRB B3
-	LDI currentFace, 0
+	DEC currentFace, currentFace%8
 	CALL redraw
-	;DEC currentFace, currentFace%8
 	JMP 0x383
 	
 tick:
 	LCRB B3
-	;ANDI currentFace, 0b01
+	ANDI currentFace, 0b11
 	IJMR currentFace
 	JMP tick_face0
+	JMP tick_face1
+	JMP tick_face2
 	JMP 0x190
 	
 redraw:
 	PLAI 125 
 	CALL OS_CLS
-
 	LCRB B3
-	;ANDI currentFace, 0b01
+	ANDI currentFace, 0b11
 	IJMR currentFace
 	JMP redraw_face0
-	RET
+	JMP redraw_face1
+	JMP redraw_face2
+	REt
 	
 ;
 ; face big style
 ;
-	
 tick_face0:
 	LCRB B0
 	CPI RB5, 0
@@ -110,23 +118,6 @@ tick_face0:
 redraw_face0:
 	LCRB B3
 	LARB B0
-	
-	;dots
-	PLAI 3
-	STLI 0xED
-	PLAI 23
-	STLI 0xE9
-	
-	;minutes
-	MVCA drawValue,RA0
-	LDI curPosL, 6
-	LDI curPosH, 0
-	CALL drawBigDigit
-	
-	MVCA drawValue,RA1
-	LDI curPosL, 4
-	LDI curPosH, 0
-	CALL drawBigDigit
 	
 	;hours
 	MVCA drawValue, RA2
@@ -144,6 +135,23 @@ redraw_face0:
 	LDI curPosH, 0
 	CALL drawBigDigit
 	
+	;dots
+	PLAI 3
+	STLI 0xED
+	PLAI 23
+	STLI 0xE9
+	
+	;minutes
+	MVCA drawValue,RA1
+	LDI curPosL, 4
+	LDI curPosH, 0
+	CALL drawBigDigit
+		
+	MVCA drawValue,RA0
+	LDI curPosL, 6
+	LDI curPosH, 0
+	CALL drawBigDigit
+
 	;dayOfWeek
 	PLAI 30
 	MVCA drawValue, RA7
@@ -238,6 +246,180 @@ drawLine3:
 	CALL OS_PRINT0-3
 	RET
 	
+;
+; face BCD
+;
+tick_face1:
+	LCRB B0
+	CPI RB5, 0
+	JNZ seconds_face1
+	CPI RB6, 0
+	JNZ seconds_face1
+		
+redraw_face1:
+	LCRB B3
+	LARB B0	
+	
+	;hours
+	MVCA drawValue, RA2
+	CPI drawValue,10
+	JC redraw_face1_if0
+	LDI drawValueH, 1
+	SBI drawValue, 10
+  redraw_face1_if0:
+    LDI drawValueH, 0
+	MVCA sadrH, RA3
+	CPJR sadrH, 0, redraw_face1_if2
+	LDI sadrL, 2
+	ADM drawValue, sadrH
+  redraw_face1_if2:
+	
+	PLAI 2
+	CALL draw_bit3
+	STLI 0x83
+	PLAI 12
+	CALL draw_bit2
+	STLI 0x83
+	PLAI 22
+	CALL draw_bit1
+	STLI 0x83
+	PLAI 32
+	CALL draw_bit0
+	STLI 0x83
+	
+	MOV drawValue, drawValueH
+	PLAI 21
+	CALL draw_bit1
+	PLAI 31
+	CALL draw_bit0
+
+	;minutes
+	MVCA drawValue,RA1
+	PLAI 14
+	CALL draw_bit2
+	PLAI 24
+	CALL draw_bit1
+	PLAI 34
+	CALL draw_bit0
+	
+	MVCA drawValue,RA0
+	PLAI 5
+	CALL draw_bit3
+	STLI 0x83
+	PLAI 15
+	CALL draw_bit2
+	STLI 0x83
+	PLAI 25
+	CALL draw_bit1
+	STLI 0x83
+	PLAI 35
+	CALL draw_bit0
+	STLI 0x83
+	
+seconds_face1:
+	LCRB B3
+	LARB B0
+	
+	;seconds
+	MVCA drawValue,RB6
+	PLAI 17
+	CALL draw_bit2
+	PLAI 27
+	CALL draw_bit1
+	PLAI 37
+	CALL draw_bit0
+	
+	MVCA drawValue,RB5
+	PLAI 8
+	CALL draw_bit3
+	PLAI 18
+	CALL draw_bit2
+	PLAI 28
+	CALL draw_bit1
+	PLAI 38
+	CALL draw_bit0
+	
+	JMP 0x98F
+	
+draw_bit0:
+	BTJR drawValue, 0, draw_bit_set
+	JMP draw_bit_clear
+
+draw_bit1:
+	BTJR drawValue, 1, draw_bit_set
+	JMP draw_bit_clear
+
+draw_bit2:
+	BTJR drawValue, 2, draw_bit_set
+	JMP draw_bit_clear
+
+draw_bit3:
+	BTJR drawValue, 3, draw_bit_set
+	JMP draw_bit_clear
+	 
+draw_bit_clear:
+	STLI 0xDB
+	RET
+	
+draw_bit_set:
+	STLI 0xFF
+	RET
+	
+;
+; face Text Time
+;
+tick_face2:
+	LCRB B0
+	CPI RB5, 0
+	JNZ seconds_face2
+	CPI RB6, 0
+	JNZ seconds_face2
+		
+redraw_face2:
+	LCRB B3
+	LARB B0	
+	
+	;hours
+	PLAI 0
+	MVCA drawValue, RA2
+	CPI drawValue, 0
+	JNZ redraw_face2_else0
+	LDI drawValue, 12
+  redraw_face2_else0:
+	CALL drawTextTime
+	
+	;minutes
+	MVCA drawValue,RA1
+	MVCA drawValue,RA0
+	
+seconds_face2:
+	LCRB B3
+	LARB B0
+	
+	;seconds
+	MVCA drawValue,RB6
+	MVCA drawValue,RB5
+	
+	JMP 0x98F
+	
+drawTextTime:
+	LDI sadrH, textTimeAdr2
+	LDI sadrM, textTimeAdr1
+	LDI sadrL, textTimeAdr0
+	
+	CLRM adderL, adderH%8
+	LDI adderL, 9
+  drawTextTime_loop0:
+	CPJR drawValue, 0, drawTextTime_loop0_end
+	ADM sadrL, adderH
+	DEC drawValue, drawValue%8
+	JMP drawTextTime_loop0
+  drawTextTime_loop0_end:
+    PSAM sadrL,sadrH%8
+	CALL OS_PRINT0-9
+    RET
+	
+	
 bigDigit:
 	;top
 	DW 0xF5EE	;0
@@ -272,7 +454,6 @@ bigDigit:
 	DW 0x20EA	;7	
 	DW 0xF3EA	;8
 	DW 0xF3EA	;9
-	
 			
 dayOfWeek:
 	DS "SUNMONTUEWEDTHUFRISAT"
@@ -280,4 +461,14 @@ dayOfWeek:
 month:
 	DS "JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC"
 	
+textTime:
+ones:
+	DS "O\'CLOCK  ONE      TWO------THREE    FOUR     FIVE     SIX      SEVEN    EIGHT    NINE     "
+
+teens:
+	DS "         ELEVEN   TWELVE   THIRTEEN FOURTEEN FIFTEEN  SIXTEEN  SEVENTEENEIGHTTEENNINETEEN "
+
+tens: 
+	DS "         TEN      TWENTY   THIRTY   FORTY    FIFTY    SIXTY    SEVENTY  EIGHTY   NINETY   "
+  
 	END
