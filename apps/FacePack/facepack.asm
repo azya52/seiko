@@ -13,6 +13,10 @@
 ##define adderM RB1
 ##define adderH RB2
 
+##define onesAdr2 ((((ones & 0x3FF)*2)>>8) & 0x0F)
+##define onesAdr1 ((((ones & 0x3FF)*2)>>4) & 0x0F)
+##define onesAdr0 ((((ones & 0x3FF)*2)   ) & 0x0F)
+
 ##define textTimeAdr2 ((((textTime & 0x3FF)*2)>>8) & 0x0F)
 ##define textTimeAdr1 ((((textTime & 0x3FF)*2)>>4) & 0x0F)
 ##define textTimeAdr0 ((((textTime & 0x3FF)*2)   ) & 0x0F)
@@ -371,13 +375,16 @@ draw_bit_set:
 tick_face2:
 	LCRB B0
 	CPI RB5, 0
-	JNZ seconds_face2
+	JNZ redraw_face2_end1
 	CPI RB6, 0
-	JNZ seconds_face2
+	JNZ redraw_face2_end1
 		
 redraw_face2:
 	LCRB B3
 	LARB B0	
+	
+	PLAI 125 
+	CALL OS_CLS
 	
 	;hours
 	PLAI 0
@@ -386,29 +393,60 @@ redraw_face2:
 	JNZ redraw_face2_else0
 	LDI drawValue, 12
   redraw_face2_else0:
-	CALL drawTextTime
-	
+	CALL drawTextTimeOnes
+  
 	;minutes
 	MVCA drawValue,RA1
+	CPI drawValue, 0
+	JZ redraw_face2_str1
+	CPI drawValue, 2
+	JC redraw_face2_str1ten
+	PLAI 10
+	SBI drawValue, 2
+	CALL drawTextTimeTens
+	JMP redraw_face2_str2ones
+  redraw_face2_str1ten:
+	MVCA drawValueH,RA0
+	ADD drawValue, drawValueH
+	PLAI 10
+	JMP redraw_face2_str2
+  redraw_face2_str1:
+	PLAI 10
 	MVCA drawValue,RA0
+	CPI drawValue, 0
+	JZ redraw_face2_str2
+	STLI 'O'
+	STLI 'H'
+  redraw_face2_str2ones:
+	PLAI 20
+  redraw_face2_str2:
+	CALL drawTextTimeOnes
+  redraw_face2_end0:
 	
-seconds_face2:
-	LCRB B3
-	LARB B0
+	;dayOfWeek
+	PLAI 30
+	MVCA drawValue, RA7
+	CALL drawDayOfWeek
 	
-	;seconds
-	MVCA drawValue,RB6
-	MVCA drawValue,RB5
+  redraw_face2_end1:
 	
 	JMP 0x98F
 	
-drawTextTime:
+drawTextTimeTens:
+	LDI sadrH, onesAdr2
+	LDI sadrM, onesAdr1
+	LDI sadrL, onesAdr0
+	JMP drawTextTime
+	
+drawTextTimeOnes:
 	LDI sadrH, textTimeAdr2
 	LDI sadrM, textTimeAdr1
 	LDI sadrL, textTimeAdr0
-	
+		
+drawTextTime:
 	CLRM adderL, adderH%8
 	LDI adderL, 9
+
   drawTextTime_loop0:
 	CPJR drawValue, 0, drawTextTime_loop0_end
 	ADM sadrL, adderH
@@ -417,6 +455,7 @@ drawTextTime:
   drawTextTime_loop0_end:
     PSAM sadrL,sadrH%8
 	CALL OS_PRINT0-9
+  
     RET
 	
 	
@@ -463,12 +502,8 @@ month:
 	
 textTime:
 ones:
-	DS "O\'CLOCK  ONE      TWO------THREE    FOUR     FIVE     SIX      SEVEN    EIGHT    NINE     "
-
-teens:
-	DS "         ELEVEN   TWELVE   THIRTEEN FOURTEEN FIFTEEN  SIXTEEN  SEVENTEENEIGHTTEENNINETEEN "
-
+	DS "O\'CLOCK  ONE      TWO      THREE    FOUR     FIVE     SIX      SEVEN    EIGHT    NINE     TEN      ELEVEN   TWELVE   THIRTEEN FOURTEEN FIFTEEN  SIXTEEN  SEVENTEENEIGHTEEN NINETEEN "
 tens: 
-	DS "         TEN      TWENTY   THIRTY   FORTY    FIFTY    SIXTY    SEVENTY  EIGHTY   NINETY   "
+	DS "TWENTY   THIRTY   FORTY    FIFTY    SIXTY    SEVENTY  EIGHTY   NINETY   "
   
 	END
