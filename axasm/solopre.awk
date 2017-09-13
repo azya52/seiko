@@ -39,7 +39,7 @@ BEGIN {
     } else {
       print "#include <" PROC ".inc>";
     }
-    print "#include \""  LFILE  "\""
+    print "#include \"lfile\""
     print "" > LFILE
     }
   }

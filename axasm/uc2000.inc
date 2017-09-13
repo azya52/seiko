@@ -182,10 +182,20 @@
 #define IO15 15
 
 #define OS_CLRCB 0x8F2	//zero registers of the current bank
-#define OS_CLS 0xBE4 //clear screen
+#define OS_PRINTLINE10 0x9CB //print "----------" (OS_PRINTLINE0-5 + OS_PRINTLINE0-5) (part of CALCULATOR)
+#define OS_PRINTWATCH 0xA1F //draw watch screen with values from current bank
+#define OS_PRINTDAYOFWEEK 0xA33	//Current day of week + 0:0000 (part of WATCH)
+#define OS_PRINTALARMSCR 0xAFB //print alarm screen (part of ALARM)
+#define OS_PRINTAM 0xB30 //print AM. 0xB12 same
+#define OS_PRINTPM 0xB32 //print PM. 0xB14 same
+#define OS_MEMOB 0xB85 //print memoB (part of MEMO)
+#define OS_BIGB 0xB8A //print big B (part of MEMO)
+#define OS_PRINT3LINE 0xBAC //print 3 line pointed at by SA register (it sets by PSAI), the fourth line is filled with "*" (part of MEMO)
+#define OS_PRINT0 0xBD0 //print line pointed at by SA register (it sets by PSAI), char count 0-10, use like "CALL OS_PRINT0-5" (print 5 chars)
+#define OS_PRINTSTAR0 0xBD6 //print "*", 0-5, use like "CALL OS_PRINTSTAR0-3" (print "***")
+#define OS_PRINTLINE0 0xBDC //print "-", 0-5, use like "CALL OS_PRINTLINE0-3" (print "---")
+#define OS_PRINTZERO0 0xBE6 //print 0x0 char, 0-5, use like "CALL OS_PRINTSTAR0-3" (print "   ")
 #define OS_COPY0BTOCB 0xBE7 //copy 0 bank to current
-#define OS_PRINT0 0xBD0
-#define OS_PRINTLINE 0xBD7
 #define OS_PRINTDAY 0xBDD
 
 
