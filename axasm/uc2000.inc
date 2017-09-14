@@ -44,11 +44,11 @@
 #define DW(n) _solo_info.ary[_solo_add++]=(n)
 
 #define DATA(n) if(dbi==1) {\
-		_solo_info.ary[_solo_add++]|=n;\
-		dbi--;\
+		_solo_info.ary[_solo_add++]|=(n & 0xFF);\
+		dbi=0;\
 	} else {\
-		_solo_info.ary[_solo_add]=n<<8;\
-		dbi++;\
+		_solo_info.ary[_solo_add]=(n & 0xFF)<<8;\
+		dbi=1;\
 	}\
 	
 #define DB(n) DATA(n)

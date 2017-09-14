@@ -1,7 +1,9 @@
 #//BANK 3
-##define curPosL RB5	
-##define curPosH RB6
+##define drawBitStyle RB4
 ##define currentFace RB7
+
+##define curPosL RC0	
+##define curPosH RC1
 
 ##define drawValue RD0
 ##define drawValueH RD1
@@ -32,6 +34,10 @@
 ##define bigDigitAdr2 ((((bigDigit & 0x3FF)*2)>>8) & 0x0F)
 ##define bigDigitAdr1 ((((bigDigit & 0x3FF)*2)>>4) & 0x0F)
 ##define bigDigitAdr0 ((((bigDigit & 0x3FF)*2)   ) & 0x0F)
+
+##define veryBigDigitAdr2 ((((veryBigDigit & 0x3FF)*2)>>8) & 0x0F)
+##define veryBigDigitAdr1 ((((veryBigDigit & 0x3FF)*2)>>4) & 0x0F)
+##define veryBigDigitAdr0 ((((veryBigDigit & 0x3FF)*2)   ) & 0x0F)
 
 ##define dayOfWeekAdr2 ((((dayOfWeek & 0x3FF)*2)>>8) & 0x0F)
 ##define dayOfWeekAdr1 ((((dayOfWeek & 0x3FF)*2)>>4) & 0x0F)
@@ -74,7 +80,9 @@ btn_mode:
 change_face:
 		LCRB B3
 		INC currentFace, currentFace%8
-		ANDI currentFace, 0b11
+		CPI currentFace, 7
+		JC redraw
+		LDI currentFace, 0
 		JMP redraw
 
 btn_transmit:
@@ -95,20 +103,30 @@ check_watch_screen:
 
 tick:
 		LCRB B3
+		LARB B0	
+		MVCAM RB5, RB6
 		IJMR currentFace
 		JMP tick_face0
+		JMP tick_bigHour
+		JMP tick_bigHourMinute
 		JMP tick_face1
 		JMP tick_face2
+		JMP tick_face3
 		JMP 0x190
 	
 redraw:
 		LCRB B3
+		LARB B0	
+		MVCAM RB5, RB6
 		PLAI 125                            ;clear
 		CALL OS_PRINTZERO0-2                ;screen
 		IJMR currentFace
 		JMP redraw_face0
+		JMP redraw_bigHour
+		JMP redraw_bigHourMinute
 		JMP redraw_face1
 		JMP redraw_face2
+		JMP redraw_face3
 		LCRB B0
 		JMP OS_PRINTWATCH
 	
@@ -116,16 +134,12 @@ redraw:
 ; face big style
 ;
 tick_face0:
-		LCRB B0
 		CPI RB5, 0
 		JNZ seconds_face0
 		CPI RB6, 0
 		JNZ seconds_face0
 		
 redraw_face0:
-		LCRB B3
-		LARB B0
-		
 		;hours
 		MVCA drawValue, RA2
 		CPI drawValue,10
@@ -139,7 +153,6 @@ redraw_face0:
 		SBI drawValue, 10
 	redraw_face0_less0:
 		LDI curPosL, 1
-		LDI curPosH, 0
 		CALL drawBigDigit
 		
 		;dots
@@ -151,21 +164,17 @@ redraw_face0:
 		;minutes
 		MVCA drawValue,RA1
 		LDI curPosL, 4
-		LDI curPosH, 0
 		CALL drawBigDigit
 			
 		MVCA drawValue,RA0
 		LDI curPosL, 6
-		LDI curPosH, 0
 		CALL drawBigDigit
 	
 		;dayOfWeek
 		PLAI 30
 		MVCA drawValue, RA7
 		CALL drawDayOfWeek
-		LDI drawValue, 0xC
-		LDI drawValueH, 0x2
-		STLM drawValue, (drawValueH)%8
+		STLI ','
 		
 		;dayOfMonth
 		MVCA drawValue,RA5
@@ -180,9 +189,6 @@ redraw_face0:
 		CALL drawMonth
 	
 seconds_face0:
-		LCRB B3
-		LARB B0
-		
 		;seconds
 		MVCA drawValue,RB6
 		LDI drawValueH, 8	
@@ -206,28 +212,23 @@ seconds_face0:
 	
 		JMP 0x98F
 
-drawBigDigit:
+drawBigDigit:	
 		LDI sadrH, bigDigitAdr2
 		LDI sadrM, bigDigitAdr1
 		LDI sadrL, bigDigitAdr0
-		LDI adderL, 2
+		LDI adderL, 6
 		CALL posToText	
 		
-		LDI adderL, 4
-		LDI adderM, 1
-		
+		LDI curPosH, 0
+		LDI drawValue, 3
 	drawBigDigit_loop0:
 		PLAM curPosL, curPosH%8
-		PSAM sadrL,sadrH%8
 		CALL OS_PRINT0-2
-		
 		ADI curPosL, 10
 		JNC drawBigDigit_nc0
 		INC curPosH, curPosH%8
 	drawBigDigit_nc0:
-	  
-	    ADM sadrL, adderH
-		CPI curPosH, 2
+		DEC drawValue, drawValue%8
 		JNZ drawBigDigit_loop0
 		RET
 	
@@ -244,37 +245,128 @@ drawMonth:
 		LDI sadrM, monthAdr1
 		LDI sadrL, monthAdr0
 		LDI adderL, 3
+		DEC drawValue, drawValue%8
 		CALL posToText	
 		JMP OS_PRINT0-3
 
 ;
+; face big hour
+;
+tick_bigHour:
+		CPI RB5, 0
+		JNZ seconds_bigHour
+		CPI RB6, 0
+		JNZ seconds_bigHour
+		
+redraw_bigHour:
+		;hours
+		CALL convert12HEXto24DEC
+		LDI curPosL, 4
+		CALL drawVeryBigDigit
+		
+		MOV drawValue, drawValueH
+		LDI curPosL, 1
+		CALL drawVeryBigDigit
+		
+		;minutes
+		MVCA drawValue,RA1
+		LDI drawValueH, 8	
+		ADD drawValue,drawValue
+		PLAI 7
+		STLM drawValue, (drawValueH)%8
+		PLAI 17
+		INC drawValue, (drawValueH)%8
+		STLM drawValue, (drawValueH)%8
+		
+		MVCA drawValue,RA0
+		ADD drawValue,drawValue
+		JNC redraw_bigHour_nc0
+		INC drawValue+1, (drawValueH)%8
+	redraw_bigHour_nc0:
+		PLAI 8
+		STLM drawValue, (drawValueH)%8
+		PLAI 18
+		INC drawValue, (drawValueH)%8
+		STLM drawValue, (drawValueH)%8
+	
+seconds_bigHour:
+		;seconds
+		PLAI 27
+		MVCA drawValue,RB6
+		STL drawValue		
+		MVCA drawValue,RB5
+		STL drawValue
+	
+		JMP 0x98F
+
+drawVeryBigDigit:
+		LDI sadrH, veryBigDigitAdr2
+		LDI sadrM, veryBigDigitAdr1
+		LDI sadrL, veryBigDigitAdr0
+		LDI adderL, 12
+		CALL posToText	
+		
+		LDI curPosH, 0
+		LDI drawValue, 4
+	drawVeryBigDigit_loop0:
+		PLAM curPosL, curPosH%8
+		CALL OS_PRINT0-3
+		ADI curPosL, 10
+		JNC drawVeryBigDigit_nc0
+		INC curPosH, curPosH%8
+	drawVeryBigDigit_nc0:
+		DEC drawValue, drawValue%8
+		JNZ drawVeryBigDigit_loop0
+		RET
+		
+;
+; face big hour & minute
+;
+tick_bigHourMinute:
+		CPI RB5, 0
+		JNZ end_bigHourMinute
+		CPI RB6, 0
+		JNZ end_bigHourMinute
+		
+redraw_bigHourMinute:
+		;hours
+		MVCA drawValue, RA2
+		CPI drawValue,10
+		JC redraw_bigHour_less0
+		PLAI 0                          ;draw
+		STLI 0x82                       ;small
+		PLAI 10                         
+		STLI 0x83                       ;one
+		SBI drawValue, 10
+	redraw_bigHour_less0:
+		LDI curPosL, 1
+		CALL drawVeryBigDigit
+		
+		;minutes
+		MVCA drawValue,RA1
+		LDI curPosL, 4
+		CALL drawVeryBigDigit
+		
+		MVCA drawValue,RA0
+		LDI curPosL, 7
+		CALL drawVeryBigDigit
+	
+end_bigHourMinute:	
+		JMP 0x98F
+		
+;
 ; face BCD
 ;
 tick_face1:
-		LCRB B0
 		CPI RB5, 0
 		JNZ seconds_face1
 		CPI RB6, 0
 		JNZ seconds_face1
 		
 redraw_face1:
-		LCRB B3
-		LARB B0	
-		
+		LDI drawBitStyle, 0
 		;hours
-		MVCA drawValue, RA2
-		CPI drawValue,10
-		JC redraw_face1_less0
-		LDI drawValueH, 1
-		SBI drawValue, 10
-	redraw_face1_less0:
-	    LDI drawValueH, 0
-		MVCA sadrH, RA3
-		CPJR sadrH, 0, redraw_face1_eq0
-		LDI sadrL, 2
-		ADM drawValue, sadrH
-	redraw_face1_eq0:
-		
+		CALL convert12HEXto24DEC
 		PLAI 2
 		CALL draw_bit3
 		STLI 0x83
@@ -304,23 +396,19 @@ redraw_face1:
 		CALL draw_bit0
 		
 		MVCA drawValue,RA0
-		PLAI 5
-		CALL draw_bit3
-		STLI 0x83
-		PLAI 15
-		CALL draw_bit2
+		CALL draw_bit0
 		STLI 0x83
 		PLAI 25
 		CALL draw_bit1
 		STLI 0x83
-		PLAI 35
-		CALL draw_bit0
+		PLAI 15
+		CALL draw_bit2
 		STLI 0x83
-	
+		PLAI 5
+		CALL draw_bit3
+		STLI 0x83
+
 seconds_face1:
-		LCRB B3
-		LARB B0
-		
 		;seconds
 		MVCA drawValue,RB6
 		PLAI 17
@@ -331,17 +419,16 @@ seconds_face1:
 		CALL draw_bit0
 		
 		MVCA drawValue,RB5
-		PLAI 8
-		CALL draw_bit3
-		PLAI 18
-		CALL draw_bit2
+		CALL draw_bit0
 		PLAI 28
 		CALL draw_bit1
-		PLAI 38
-		CALL draw_bit0
-		
+		PLAI 18
+		CALL draw_bit2
+		PLAI 8
+		CALL draw_bit3
+
 		JMP 0x98F
-	
+		
 draw_bit0:
 		BTJR drawValue, 0, draw_bit_set
 		JMP draw_bit_clear
@@ -359,81 +446,174 @@ draw_bit3:
 		JMP draw_bit_clear
 	 
 draw_bit_clear:
+		IJMR drawBitStyle
 		STLI 0xDB
+		RET
+		STLI 0xDF
+		RET
+		STLI 0xA1
 		RET
 	
 draw_bit_set:
+		IJMR drawBitStyle
 		STLI 0xFF
 		RET
+		STLI 0xE9
+		RET
+		STLI 0xED
+		RET
+		
+convert12HEXto24DEC:
+		MVCA drawValue, RA2
+		CPI drawValue, 12
+		JNZ convert12HEXto24DEC_neq0
+		LDI drawValue, 0
+	convert12HEXto24DEC_neq0:	
+		LDI drawValueH, 0
+		INCB drawValue, drawValueH%8                    ;convert
+		DECB drawValue, drawValueH%8                    ;hex to dec
+	convert12HEXto24DEC_less0:
+	    MVCA adderM, RA3
+		CPJR adderM, 0, convert12HEXto24DEC_eq0
+		LDI adderL, 2
+		ADBM drawValue, adderM
+	convert12HEXto24DEC_eq0:		
+		RET
+		
+;
+; face Binary
+;
+tick_face2:
+		CPI RB5, 0
+		JNZ seconds_face2
+		CPI RB6, 0
+		JNZ seconds_face2
+		
+redraw_face2:
+		LDI drawBitStyle, 0
+		;hours
+		CALL convert12HEXto24DEC
+		PLAI 14
+		CALL face2_draw_4bits
+		PLAI 13
+		CALL draw_bit0
 	
+		;minutes
+		MVCAM drawValue, RA1
+		PLAI 24
+		CALL face2_draw_4bits
+		PLAI 22
+		CALL face2_draw_2bits
+		
+		;date
+		LDI drawBitStyle, 2
+		MVCA drawValueH,RA5
+		MVCA drawValue,RA4
+		PLAI 4
+		CALL face2_draw_4bits
+		PLAI 3
+		CALL draw_bit0
+	
+seconds_face2:
+		;seconds
+		LDI drawBitStyle, 4
+		MVCA drawValueH,RB6
+		MVCA drawValue,RB5
+		PLAI 34
+		CALL face2_draw_4bits
+		PLAI 32
+		CALL face2_draw_2bits
+		
+		JMP 0x98F
+
+face2_draw_4bits:
+		CALL dec2hex
+		CALL draw_bit3
+		CALL draw_bit2
+face2_draw_2bits:
+		CALL draw_bit1
+		CALL draw_bit0
+		MOV drawValue, drawValueH
+		RET
+		
+dec2hex:
+		CLRM adderL, adderH%8
+		
+	dec2hex_loop0:
+		CPJR drawValueH, 0, dec2hex_end
+		DEC drawValueH, drawValueH%8
+		ADI adderL, 0xA
+		JNC dec2hex_loop0
+		INC adderM, adderM%8
+		JMP dec2hex_loop0
+		
+	dec2hex_end:
+		ADM drawValue, adderM
+		RET
 ;
 ; face Text Time
 ;
-tick_face2:
-		LCRB B0
+tick_face3:
 		CPI RB5, 0
-		JNZ redraw_face2_end1
+		JNZ redraw_face3_end1
 		CPI RB6, 0
-		JNZ redraw_face2_end1
+		JNZ redraw_face3_end1
 		
-redraw_face2:
-		LCRB B3
-		LARB B0	
-		
+redraw_face3:
 		PLAI 125                            ;clear
 		CALL OS_PRINTZERO0-2                ;screen
 		
 		;hours
-		PLAI 10
+		PLAI 11
 		MVCA drawValue, RA2
 		CPI drawValue, 10
-		JC redraw_face2_less0
+		JC redraw_face3_less0
 		SBI drawValue, 10
 		CALL drawTextTimeTeens
-		JMP redraw_face2_minutes
-	redraw_face2_less0:
+		JMP redraw_face3_minutes
+	redraw_face3_less0:
 		CALL drawTextTimeOnes
 	  
-	redraw_face2_minutes:
+	redraw_face3_minutes:
 		;minutes
 		MVCA drawValue,RA1
-		PLAI 20
+		PLAI 21
 		CPI drawValue, 0
-		JZ redraw_face2_str1
+		JZ redraw_face3_str1
 		CPI drawValue, 2
-		JC redraw_face2_str1ten
+		JC redraw_face3_str1ten
 		SBI drawValue, 2
 		CALL drawTextTimeTens
 		MVCA drawValue,RA0
 		CPI drawValue, 0
-		JNZ redraw_face2_str2ones
-		JMP redraw_face2_end0
-	redraw_face2_str1ten:
+		JNZ redraw_face3_str2ones
+		JMP redraw_face3_end0
+	redraw_face3_str1ten:
 		MVCA drawValue,RA0
 		CALL drawTextTimeTeens
-		JMP redraw_face2_end0
-	redraw_face2_str1:
+		JMP redraw_face3_end0
+	redraw_face3_str1:
 		MVCA drawValue,RA0
 		STLI 'O'
 		CPI drawValue, 0
-		JNZ redraw_face2_oh
+		JNZ redraw_face3_oh
 		STLI '\''		
-		JMP redraw_face2_str2
-	redraw_face2_oh:
+		JMP redraw_face3_str2
+	redraw_face3_oh:
 		STLI 'H'
-	redraw_face2_str2ones:
-		PLAI 30
-	redraw_face2_str2:
+	redraw_face3_str2ones:
+		PLAI 31
+	redraw_face3_str2:
 		CALL drawTextTimeOnes
-	redraw_face2_end0:
+	redraw_face3_end0:
 		
 		;dayOfWeek
-		PLAI 0
+		PLAI 1
 		MVCA drawValue, RA7
 		CALL drawDayOfWeek
 		CALL OS_PRINT0-6
 		
-	redraw_face2_end1:
+	redraw_face3_end1:
 		JMP 0x98F
 	
 drawTextTimeTeens:
@@ -472,39 +652,78 @@ posToText:
 		RET
 	
 bigDigit:
-		;top
 		DW 0xF5EE	;0
-		DW 0x20EE	;1
-		DW 0xF5EE	;2
-		DW 0xF5EE	;3
-		DW 0xEEEE	;4
-		DW 0xF5EE   ;FA	;5
-		DW 0xF5EE	;6
-		DW 0xF5EE	;7
-		DW 0xF5EE	;8
-		DW 0xF5EE	;9
-		;middle
 		DW 0xE6E6	;0
-		DW 0x20E6	;1
-		DW 0xF5EA	;2
-		DW 0xFAE6	;3
-		DW 0xF3E6	;4
-		DW 0xF3EE	;5
-		DW 0xFEEE	;6
-		DW 0x20E6	;7
-		DW 0xFEE6	;8
-		DW 0xF3E6	;9
-		;bottom
 		DW 0xF3EA	;0
+		DW 0x20EE	;1
+		DW 0x20E6	;1
 		DW 0x20EA	;1
+		DW 0xF5EE	;2
+		DW 0xF5EA	;2
 		DW 0xF3EA	;2
+		DW 0xF5EE	;3
+		DW 0xFAE6	;3
 		DW 0xF3EA	;3
+		DW 0xEEEE	;4
+		DW 0xF3E6	;4
 		DW 0x20EA	;4	
+		DW 0xF5EE   ;FA	;5
+		DW 0xF3EE	;5
 		DW 0xF3EA	;5
+		DW 0xF5EE	;6
+		DW 0xFEEE	;6
 		DW 0xF3EA	;6
+		DW 0xF5EE	;7
+		DW 0x20E6	;7
 		DW 0x20EA	;7	
+		DW 0xF5EE	;8
+		DW 0xFEE6	;8
 		DW 0xF3EA	;8
+		DW 0xF5EE	;9
+		DW 0xF3E6	;9
 		DW 0xF3EA	;9
+		
+veryBigDigit:
+		DS "\xFF\xE7\xE6"	;0
+		DS "\xFF\x20\xE6"	;0
+		DS "\xFF\x20\xE6"	;0
+		DS "\xFF\xE8\xE6"	;0
+		DS "\xEB\xFF\x20"	;1
+		DS "\x20\xFF\x20"	;1
+		DS "\x20\xFF\x20"	;1
+		DS "\x20\xFF\x20"	;1
+		DS "\xFF\xE7\xE6"	;2
+		DS "\xE8\xE8\xE6"	;2
+		DS "\xFF\x20\x20"	;2
+		DS "\xFF\xE8\xED"	;2
+		DS "\xFF\xE7\xE6"	;3
+		DS "\x20\xE8\xEA"	;3
+		DS "\x20\x20\xE6"	;3
+		DS "\xFF\xE8\xE6"	;3
+		DS "\xFF\x20\xE6"	;4
+		DS "\xFF\xE8\xE6"	;4
+		DS "\x20\x20\xE6"	;4
+		DS "\x20\x20\xE6"	;4
+		DS "\xFF\xE7\xE9"	;5
+		DS "\xFF\xE8\xED"	;5
+		DS "\x20\x20\xE6"	;5
+		DS "\xFF\xE8\xE6"	;5
+		DS "\xFF\xE7\xEA"	;6
+		DS "\xFF\xE8\xED"	;6
+		DS "\xFF\x20\xE6"	;6
+		DS "\xFF\xE8\xE6"	;6
+		DS "\xFF\xE7\xE6"	;7
+		DS "\x20\xEF\xEA"	;7
+		DS "\x20\xFF\x20"	;7
+		DS "\x20\xFF\x20"	;7
+		DS "\xFF\xE7\xE6"	;8
+		DS "\xFF\xE8\xE6"	;8
+		DS "\xFF\x20\xE6"	;8
+		DS "\xFF\xE8\xE6"	;8
+		DS "\xFF\xE7\xE6"	;9
+		DS "\xFF\xE8\xE6"	;9
+		DS "\x20\x20\xE6"	;9
+		DS "\xFF\xE8\xE6"	;9
 			
 dayOfWeek:
 		DS "SUNDAY   MONDAY   TUESDAY  WEDNESDAYTHURSDAY FRIDAY   SATURDAY "
