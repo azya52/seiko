@@ -25,8 +25,8 @@ Programs written by me. Now there's Tetris and Watch face pack, see demo video
 Firmware sources for the PC -> Watch wireless interface, and the application for Windows based on http://www.sigma957.org/datagraph.html
 I will publish the device schemes a little later.
 
-Tetris demo
+*Tetris demo*
 [![Video](https://img.youtube.com/vi/BHnZNJsGcyE/0.jpg)](https://www.youtube.com/watch?v=BHnZNJsGcyE)
 
-Face pack demo
+*Face pack demo*
 [![Video](https://img.youtube.com/vi/W52tVbbM9_A/0.jpg)](https://www.youtube.com/watch?v=W52tVbbM9_A)
