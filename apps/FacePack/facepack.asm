@@ -19,33 +19,33 @@
 #//BANK 1
 ##define btnPressed RD1
 
-##define onesAdr2 ((((ones & 0x3FF)*2)>>8) & 0x0F)
-##define onesAdr1 ((((ones & 0x3FF)*2)>>4) & 0x0F)
-##define onesAdr0 ((((ones & 0x3FF)*2)   ) & 0x0F)
+##define onesAdr2 (((ones*2)>>8) & 0x0F)
+##define onesAdr1 (((ones*2)>>4) & 0x0F)
+##define onesAdr0 (((ones*2)   ) & 0x0F)
 
-##define tensAdr2 ((((tens & 0x3FF)*2)>>8) & 0x0F)
-##define tensAdr1 ((((tens & 0x3FF)*2)>>4) & 0x0F)
-##define tensAdr0 ((((tens & 0x3FF)*2)   ) & 0x0F)
+##define tensAdr2 (((tens*2)>>8) & 0x0F)
+##define tensAdr1 (((tens*2)>>4) & 0x0F)
+##define tensAdr0 (((tens*2)   ) & 0x0F)
 
-##define teensAdr2 ((((teens & 0x3FF)*2)>>8) & 0x0F)
-##define teensAdr1 ((((teens & 0x3FF)*2)>>4) & 0x0F)
-##define teensAdr0 ((((teens & 0x3FF)*2)   ) & 0x0F)
+##define teensAdr2 (((teens*2)>>8) & 0x0F)
+##define teensAdr1 (((teens*2)>>4) & 0x0F)
+##define teensAdr0 (((teens*2)   ) & 0x0F)
 
-##define bigDigitAdr2 ((((bigDigit & 0x3FF)*2)>>8) & 0x0F)
-##define bigDigitAdr1 ((((bigDigit & 0x3FF)*2)>>4) & 0x0F)
-##define bigDigitAdr0 ((((bigDigit & 0x3FF)*2)   ) & 0x0F)
+##define bigDigitAdr2 (((bigDigit*2)>>8) & 0x0F)
+##define bigDigitAdr1 (((bigDigit*2)>>4) & 0x0F)
+##define bigDigitAdr0 (((bigDigit*2)   ) & 0x0F)
 
-##define veryBigDigitAdr2 ((((veryBigDigit & 0x3FF)*2)>>8) & 0x0F)
-##define veryBigDigitAdr1 ((((veryBigDigit & 0x3FF)*2)>>4) & 0x0F)
-##define veryBigDigitAdr0 ((((veryBigDigit & 0x3FF)*2)   ) & 0x0F)
+##define veryBigDigitAdr2 (((veryBigDigit*2)>>8) & 0x0F)
+##define veryBigDigitAdr1 (((veryBigDigit*2)>>4) & 0x0F)
+##define veryBigDigitAdr0 (((veryBigDigit*2)   ) & 0x0F)
 
-##define dayOfWeekAdr2 ((((dayOfWeek & 0x3FF)*2)>>8) & 0x0F)
-##define dayOfWeekAdr1 ((((dayOfWeek & 0x3FF)*2)>>4) & 0x0F)
-##define dayOfWeekAdr0 ((((dayOfWeek & 0x3FF)*2)   ) & 0x0F)
+##define dayOfWeekAdr2 (((dayOfWeek*2)>>8) & 0x0F)
+##define dayOfWeekAdr1 (((dayOfWeek*2)>>4) & 0x0F)
+##define dayOfWeekAdr0 (((dayOfWeek*2)   ) & 0x0F)
 
-##define monthAdr2 ((((month & 0x3FF)*2)>>8) & 0x0F)
-##define monthAdr1 ((((month & 0x3FF)*2)>>4) & 0x0F)
-##define monthAdr0 ((((month & 0x3FF)*2)   ) & 0x0F)
+##define monthAdr2 (((month*2)>>8) & 0x0F)
+##define monthAdr1 (((month*2)>>4) & 0x0F)
+##define monthAdr0 (((month*2)   ) & 0x0F)
 	
 		ORG 0 
 		JMP start		

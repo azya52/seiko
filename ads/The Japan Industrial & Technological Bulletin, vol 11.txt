@@ -1,0 +1,14 @@
+The Japan Industrial & Technological Bulletin, Vol. 11
+Japan External Trade Organization, Machinery and Technology Dept., 1983
+
+	Hattori Seiko Co., Ltd., has developed a wristwatch-type computer
+system to be used as portable information equipment apable of handing
+personal data.
+	Employing the 'Seiko UC-2000 Series' developed by Seiko Instruments
+and Electronics Ltd.
+...
+the system is composed of three components: wristwatch (UC-2000); keyboard
+(UC-2100); and controller (UC-2200).
+	The wristwatch has the normal functions for time, calendar, alarm and
+chronograph, as well as a memo display with capacity 2,000 characters. A
+22mm x 17mm liquid crystal panel

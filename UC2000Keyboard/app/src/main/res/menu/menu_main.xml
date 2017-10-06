@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.azya.seiko.uc2000.MainActivity">
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/antiphase"
+            android:orderInCategory="0"
+            android:checkable="true"
+            android:title="@string/antiphase"/>
+    </group>
+    <item
+        android:id="@+id/how_to_use"
+        android:orderInCategory="100"
+        android:title="@string/how_to_use"/>
+</menu>
