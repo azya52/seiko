@@ -19,12 +19,14 @@ Assembler for Seico Cal. UW01, I used axasm by Al Williams (https://github.com/w
 Very simple disassembler, but without which I would not have managed (Source code of applications from the ROM are in ./rom/disassembled)
 
 **./apps**<br />
-Programs written by me. Now there's only Tetris, I have plans for custom watchfaces and maybe a couple more games.
+Programs written by me. Now there's Tetris and Watch face pack, see demo video
 
 **./Transmitters**<br />
 Firmware sources for the PC -> Watch wireless interface, and the application for Windows based on http://www.sigma957.org/datagraph.html
 I will publish the device schemes a little later.
 
-
+**Tetris demo**<br />
 [![Video](https://img.youtube.com/vi/BHnZNJsGcyE/0.jpg)](https://www.youtube.com/watch?v=BHnZNJsGcyE)
 
+**Face pack demo**<br />
+[![Video](https://img.youtube.com/vi/W52tVbbM9_A/0.jpg)](https://www.youtube.com/watch?v=W52tVbbM9_A)
