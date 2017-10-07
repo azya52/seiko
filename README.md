@@ -35,4 +35,4 @@ Source code of the application for Android emulating UC-2100 keyboard, in which 
 [![Video](https://img.youtube.com/vi/W52tVbbM9_A/0.jpg)](https://www.youtube.com/watch?v=W52tVbbM9_A)
 
 **UC2000 Keyboard demo**<br />
-[![Video](https://img.youtube.com/vi/W52tVbbM9_A/0.jpg)](https://www.youtube.com/watch?v=F5JUM7w5gWQ)
+[![Video](https://img.youtube.com/vi/F5JUM7w5gWQ/0.jpg)](https://www.youtube.com/watch?v=F5JUM7w5gWQ)
