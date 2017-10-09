@@ -29,6 +29,16 @@ I will publish the device schemes a little later.
 
 **[./UC2000Keyboard](https://github.com/azya52/seiko/tree/master/UC2000Keyboard)**<br />
 Source code of the application for Android emulating UC-2100 keyboard, in which to transfer data to the watch using phone speaker coil. Due to frequency limitations (the application transmits at 16384Hz, while the native frequency is 32768Hz) the transmission comes with a significant number of errors - at best 10-20%. This app on [Google Play](https://play.google.com/store/apps/details?id=com.azya.seiko.uc2000)
+<br /><br />
+
+**Summary**:
+- Restored and documented most of the processor instructions;
+- Written an assembler on the basis of AXASM;
+- Written a simple disassembler;
+- Written a two apps - Tetris and the set of custom faces;
+- Made a device to connect the watch to the PC;
+- Written an emulator of UC-2100 keyboard for Android phones.
+<br />
 
 **Tetris demo**<br />
 [![Video](https://img.youtube.com/vi/BHnZNJsGcyE/0.jpg)](https://www.youtube.com/watch?v=BHnZNJsGcyE)
