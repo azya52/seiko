@@ -25,7 +25,19 @@ Programs written by me. Now there's Tetris and Watch face pack, see demo video
 
 **[./Transmitters](https://github.com/azya52/seiko/tree/master/Transmitters)**<br />
 Firmware sources for the PC -> Watch wireless interface, and the application for Windows based on http://www.sigma957.org/datagraph.html
-I will publish the device schemes a little later.
+
+**Simple Arduino Nano-based transmitter**
+
+![Nano based scheme](/misc/simpleArduinoTransmitter.png)
+The sketch is [here](/Transmitters/ArduinoNanoBased/ucTransmitterNano/ucTransmitterNano.ino), I used IDE v1.8.5.
+
+After assembling the scheme and uploading the sketch, you can run the [UC2000Com](/Transmitters/UC2000Com.exe) app (for Windows), with which you can upload programs to your Seiko or simply use it as an external keyboard.
+
+For example, the assembled circuit may look something like this:
+
+<img src="/misc/simpleArduinoTransmitterex.jpg" width="50%">
+
+Seiko placed directly on the coil.
 
 **[./UC2000Keyboard](https://github.com/azya52/seiko/tree/master/UC2000Keyboard)**<br />
 Source code of the application for Android emulating UC-2100 keyboard, in which to transfer data to the watch using phone speaker coil. Due to frequency limitations (the application transmits at 16384Hz, while the native frequency is 32768Hz) the transmission comes with a significant number of errors - at best 10-20%. This app on [Google Play](https://play.google.com/store/apps/details?id=com.azya.seiko.uc2000)
