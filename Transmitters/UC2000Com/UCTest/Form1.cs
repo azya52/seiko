@@ -37,9 +37,7 @@ namespace UC2000Com
             bool result = true;
             try
             {
-                UCPort = new SerialPort("COM" + Properties.Settings.Default.COMPort, 2400);
-                //UCPort = new SerialPort("COM" + Properties.Settings.Default.COMPort, 2048, Parity.Even);
-                UCPort.ReadTimeout = 1000;
+                UCPort = new SerialPort("COM" + Properties.Settings.Default.COMPort, 9600);
                 UCPort.Open();
                 UCPort.DtrEnable = true;
                 UCPort.RtsEnable = true;
@@ -423,7 +421,7 @@ namespace UC2000Com
                             }
                         }
 
-                        state = (byte)UCPort.ReadByte(); // discard echo of 0x04
+                        state = (byte)UCPort.ReadByte(); // discard echo
                         state = (byte)UCPort.ReadByte();
                         if (state != 0x13) {
                             Console.WriteLine("State 0x" + state.ToString("X2"));
@@ -434,25 +432,23 @@ namespace UC2000Com
                         BusyWaitms(90);
                         SendByte(0x00);
                         BusyWaitms(90);
-
+                        
                         for (i = 0; i < 256; i++) {
                             pos = page * 256 + i;
-                            if (pos < data.Length)
-                            {
+                            if (pos < data.Length) {
                                 SendByte(data[pos]);
-                            } else
-                            {
-                                SendByte(0);
+                            } else {
+                                SendByte(0x00);
                             }
                             BusyWaitms(10);
                             textBox1.Text = ((pos + 1) + " Bytes sent");
                             textBox1.Update();
-                            //Application.DoEvents();
                         }
                         if (pos > data.Length - 1)
                         {
                             return;
                         }
+                        
                     }
                 }
                 catch (Exception ex) {
