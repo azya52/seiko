@@ -37,7 +37,7 @@ namespace UC2000Com
             bool result = true;
             try
             {
-                UCPort = new SerialPort("COM" + Properties.Settings.Default.COMPort, 9600);
+                UCPort = new SerialPort("COM" + Properties.Settings.Default.COMPort, 2400);
                 UCPort.Open();
                 UCPort.DtrEnable = true;
                 UCPort.RtsEnable = true;

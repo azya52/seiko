@@ -3,7 +3,7 @@
 unsigned long SLEEP_uSEC = 1000000/TRANSM_FREQ/2;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(2400);
   while (!Serial) {
   }
   pinMode(COIL_PIN, OUTPUT);
