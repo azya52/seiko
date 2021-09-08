@@ -6,7 +6,7 @@ This is a project to restore of instruction set for Seiko UC-2000 and analogs. T
 Instruction Set that I was able to recover.
 
 **[./rom](https://github.com/azya52/seiko/tree/master/rom)**<br />
-Contains 5 applications from the original ROM that came with the UC-2200. These files were taken from http://www.sigma957.org/datagraph.html
+Contains 5 applications from the original ROM that came with the UC-2200. These files were taken from http://www.sigma957.org/datagraph.html Also disassembled code [by me](https://github.com/azya52/seiko/tree/master/rom/disassembled) and [by Michael Rothe](https://github.com/azya52/seiko/tree/master/rom/disassembled/sigma957)
 
 **[./docs](https://github.com/azya52/seiko/tree/master/docs)**<br />
 Manuals and other documents.
