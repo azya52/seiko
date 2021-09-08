@@ -1,0 +1,1067 @@
+(+000) c00           CC18    jump c18 (+030) LABEL000
+(+002) c01           CC26    jump c26 (+04c) LABEL001
+(+004) c02           CF1F    jump f1f (+63e) LABEL002
+(+006) c03           C109    jump 109 (rom)
+(+008) c04           C0E0    jump 0e0 (rom)
+(+00a) c05           CC0F    jump c0f (+01e) LABEL003
+(+00c) c06           C283    jump 283 (rom)
+(+00e) c07           CC43    jump c43 (+086) LABEL004
+(+010) c08           CCE2    jump ce2 (+1c4) LABEL005
+(+012) c09           C2A9    jump 2a9 (rom)
+(+014) c0a           C307    jump 307 (rom)
+(+016) c0b           C39C    jump 39c (rom)
+(+018) c0c           C09B    jump 09b (rom)
+(+01a) c0d           C98F    jump 98f (rom)
+(+01c) c0e           B000    ret
+(+01e) c0f LABEL003: 5728    0101.0111.0010.1000
+(+020) c10           432E    and r25 &= #7
+(+022) c11           D417    jpne c17 (+02e) LABEL006
+(+024) c12           3C10    select primary reg bank 2
+(+026) c13           12E2    add bin r23 += #1
+(+028) c14           F6E1    jr[r23!=0] c16 (+02c) LABEL007
+(+02a) c15           CF14    jump f14 (+628) LABEL008
+(+02c) c16 LABEL007: 8830    load r01 <- #8
+(+02e) c17 LABEL006: C243    jump 243 (rom)
+(+030) c18 LABEL000: AF38    call f38 (+670) LABEL009
+(+032) c19           3C08    select primary reg bank 1
+(+034) c1a           8956    load r10 <- #B
+(+036) c1b           AF30    call f30 (+660) LABEL010
+(+038) c1c           3C10    select primary reg bank 2
+(+03a) c1d           A8F2    call 8f2 (rom)
+(+03c) c1e           3C18    select primary reg bank 3
+(+03e) c1f           A8F2    call 8f2 (rom)
+(+040) c20           8ACA    load r22 <- #5
+(+042) c21           79E5    load dispptr <- #7d
+(+044) c22           ABE4    call be4 (rom)
+(+046) c23           A7EF    call 7ef (rom)
+(+048) c24           3C00    select primary reg bank 0
+(+04a) c25           CC2A    jump c2a (+054) LABEL011
+(+04c) c26 LABEL001: 3C00    select primary reg bank 0
+(+04e) c27           E1E1    j[1110.0001.111*] c29 (+052) LABEL012
+(+050) c28           CC2A    jump c2a (+054) LABEL011
+(+052) c29 LABEL012: F205    jr[r16=0] c2f (+05e) LABEL013
+(+054) c2a LABEL011: F581    jr[r12!=0] c2c (+058) LABEL014
+(+056) c2b           C190    jump 190 (rom)
+(+058) c2c LABEL014: 3C18    select primary reg bank 3
+(+05a) c2d           EAC2    j[1110.1010.110*] c30 (+060) LABEL015
+(+05c) c2e           CC40    jump c40 (+080) LABEL016
+(+05e) c2f LABEL013: CF14    jump f14 (+628) LABEL008
+(+060) c30 LABEL015: F021    jr[r01=0] c32 (+064) LABEL017
+(+062) c31           CD25    jump d25 (+24a) LABEL018
+(+064) c32 LABEL017: 7822    load dispptr <- #0a (10)
+(+066) c33           7D11    load (dispptr++) <- #41 'A'
+(+068) c34           7D35    load (dispptr++) <- #4d 'M'
+(+06a) c35           7D31    load (dispptr++) <- #49 'I'
+(+06c) c36           7D14    load (dispptr++) <- #44 'D'
+(+06e) c37           7D11    load (dispptr++) <- #41 'A'
+(+070) c38           7C90    load (dispptr++) <- #20 ' '
+(+072) c39           7D33    load (dispptr++) <- #4b 'K'
+(+074) c3a           7D55    load (dispptr++) <- #55 'U'
+(+076) c3b           7D32    load (dispptr++) <- #4a 'J'
+(+078) c3c           7D31    load (dispptr++) <- #49 'I'
+(+07a) c3d           F402    jr[r00!=0] c40 (+080) LABEL016
+(+07c) c3e           8802    load r00 <- #1
+(+07e) c3f           C227    jump 227 (rom)
+(+080) c40 LABEL016: ABE7    call be7 (rom)
+(+082) c41           AF38    call f38 (+670) LABEL009
+(+084) c42           C190    jump 190 (rom)
+(+086) c43 LABEL004: 5728    0101.0111.0010.1000
+(+088) c44           433A    and r25 &= #D
+(+08a) c45           D448    jpne c48 (+090) LABEL019
+(+08c) c46           3C18    select primary reg bank 3
+(+08e) c47           E2C3    j[1110.0010.110*] c4b (+096) LABEL020
+(+090) c48 LABEL019: ABE7    call be7 (rom)
+(+092) c49           AF38    call f38 (+670) LABEL009
+(+094) c4a           C2DF    jump 2df (rom)
+(+096) c4b LABEL020: 8C42    clr r02
+(+098) c4c           5C8F    0101.1100.1000.1111
+(+09a) c4d           F081    jr[r04=0] c4f (+09e) LABEL021
+(+09c) c4e           CCAE    jump cae (+15c) LABEL022
+(+09e) c4f LABEL021: 3C18    select primary reg bank 3
+(+0a0) c50           A8F2    call 8f2 (rom)
+(+0a2) c51           8AC4    load r22 <- #2
+(+0a4) c52           3C10    select primary reg bank 2
+(+0a6) c53           8AE2    load r23 <- #1
+(+0a8) c54           8960    load r11 <- #0
+(+0aa) c55           AF7E    call f7e (+6fc) LABEL023
+(+0ac) c56           AF7E    call f7e (+6fc) LABEL023
+(+0ae) c57           AFA0    call fa0 (+740) LABEL024
+(+0b0) c58           820A    load r16 <- r10
+(+0b2) c59           4D6B    inc r11
+(+0b4) c5a           AF7E    call f7e (+6fc) LABEL023
+(+0b6) c5b           AFA0    call fa0 (+740) LABEL024
+(+0b8) c5c           822A    load r17 <- r10
+(+0ba) c5d           4D6B    inc r11
+(+0bc) c5e           AF7E    call f7e (+6fc) LABEL023
+(+0be) c5f           AFA0    call fa0 (+740) LABEL024
+(+0c0) c60           824A    load r18 <- r10
+(+0c2) c61           4D6B    inc r11
+(+0c4) c62           AF7E    call f7e (+6fc) LABEL023
+(+0c6) c63           AFA0    call fa0 (+740) LABEL024
+(+0c8) c64           826A    load r19 <- r10
+(+0ca) c65           8960    load r11 <- #0
+(+0cc) c66           AF7E    call f7e (+6fc) LABEL023
+(+0ce) c67           AF7E    call f7e (+6fc) LABEL023
+(+0d0) c68           AFA0    call fa0 (+740) LABEL024
+(+0d2) c69           828A    load r20 <- r10
+(+0d4) c6a           4D6B    inc r11
+(+0d6) c6b           AF7E    call f7e (+6fc) LABEL023
+(+0d8) c6c           AFA0    call fa0 (+740) LABEL024
+(+0da) c6d           830A    load r24 <- r10
+(+0dc) c6e           4D6B    inc r11
+(+0de) c6f           AF7E    call f7e (+6fc) LABEL023
+(+0e0) c70           AFA0    call fa0 (+740) LABEL024
+(+0e2) c71           832A    load r25 <- r10
+(+0e4) c72           4D6B    inc r11
+(+0e6) c73           AF7E    call f7e (+6fc) LABEL023
+(+0e8) c74           AFA0    call fa0 (+740) LABEL024
+(+0ea) c75           834A    load r26 <- r10
+(+0ec) c76           4D6B    inc r11
+(+0ee) c77           AF7E    call f7e (+6fc) LABEL023
+(+0f0) c78           AFA0    call fa0 (+740) LABEL024
+(+0f2) c79           836A    load r27 <- r10
+(+0f4) c7a           AF87    call f87 (+70e) LABEL025
+(+0f6) c7b           4D6B    inc r11
+(+0f8) c7c           AF7E    call f7e (+6fc) LABEL023
+(+0fa) c7d           AF7E    call f7e (+6fc) LABEL023
+(+0fc) c7e           AFBF    call fbf (+77e) LABEL026
+(+0fe) c7f           3E18    select secondary reg bank 3
+(+100) c80           9614    load secbank:r20:19:18:17:16 <- pribank:r20:19:18:17:16
+(+102) c81           971B    load secbank:r27:26:25:24 <- pribank:r27:26:25:24
+(+104) c82           9545    load secbank:r05:04:03:02 <- pribank:r13:12:11:10
+(+106) c83           A8F2    call 8f2 (rom)
+(+108) c84           8AE2    load r23 <- #1
+(+10a) c85           3C18    select primary reg bank 3
+(+10c) c86           7800    load dispptr <- #00 (00)
+(+10e) c87           AFE0    call fe0 (+7c0) LABEL027
+(+110) c88           7822    load dispptr <- #0a (10)
+(+112) c89           8BEC    load r31 <- #6
+(+114) c8a           AF3B    call f3b (+676) LABEL028
+(+116) c8b           F608    jr[r16!=0] c94 (+128) LABEL029
+(+118) c8c           FA0B    jr[r16 ??] c98 (+130) LABEL030
+(+11a) c8d           FE0D    jr[r16 ??] c9b (+136) LABEL031
+(+11c) c8e           B605    1011.0110.0000.0101
+(+11e) c8f LABEL037: F62E    jr[r17!=0] c9e (+13c) LABEL032
+(+120) c90           FA31    jr[r17 ??] ca2 (+144) LABEL033
+(+122) c91           FE33    jr[r17 ??] ca5 (+14a) LABEL034
+(+124) c92           B62B    1011.0110.0010.1011
+(+126) c93           CCA7    jump ca7 (+14e) LABEL035
+(+128) c94 LABEL029: 7845    load dispptr <- #15 (21)
+(+12a) c95           AF43    call f43 (+686) LABEL036
+(+12c) c96           EA04    j[1110.1010.000*] c9b (+136) LABEL031
+(+12e) c97           CC8F    jump c8f (+11e) LABEL037
+(+130) c98 LABEL030: 7860    load dispptr <- #18 (24)
+(+132) c99           AF47    call f47 (+68e) LABEL038
+(+134) c9a           CC8F    jump c8f (+11e) LABEL037
+(+136) c9b LABEL031: 7862    load dispptr <- #1a (26)
+(+138) c9c           AF43    call f43 (+686) LABEL036
+(+13a) c9d           CC8F    jump c8f (+11e) LABEL037
+(+13c) c9e LABEL032: 7867    load dispptr <- #1f (31)
+(+13e) c9f           AF43    call f43 (+686) LABEL036
+(+140) ca0           EA24    j[1110.1010.001*] ca5 (+14a) LABEL034
+(+142) ca1           CCA7    jump ca7 (+14e) LABEL035
+(+144) ca2 LABEL033: 7882    load dispptr <- #22 (34)
+(+146) ca3           AF47    call f47 (+68e) LABEL038
+(+148) ca4           CCA7    jump ca7 (+14e) LABEL035
+(+14a) ca5 LABEL034: 7884    load dispptr <- #24 (36)
+(+14c) ca6           AF43    call f43 (+686) LABEL036
+(+14e) ca7 LABEL035: 1482    add bcd r04 += #1
+(+150) ca8           8AC4    load r22 <- #2
+(+152) ca9           88D0    load r06 <- #8
+(+154) caa           88F2    load r07 <- #9
+(+156) cab           ABE7    call be7 (rom)
+(+158) cac           AF38    call f38 (+670) LABEL009
+(+15a) cad           C2DF    jump 2df (rom)
+(+15c) cae LABEL022: AF52    call f52 (+6a4) LABEL039
+(+15e) caf           4FCE    inc r30
+(+160) cb0           FBD0    jr[r30 ??] cc1 (+182) LABEL040
+(+162) cb1           B860    jr (r03)
+(+164) cb2           CCB3    jump cb3 (+166) LABEL041
+(+166) cb3 LABEL041: CCB4    jump cb4 (+168) LABEL042
+(+168) cb4 LABEL042: 1010    add bin r00 += #8
+(+16a) cb5           CCBB    jump cbb (+176) LABEL043
+(+16c) cb6           1008    add bin r00 += #4
+(+16e) cb7           CCBB    jump cbb (+176) LABEL043
+(+170) cb8           1004    add bin r00 += #2
+(+172) cb9           CCBB    jump cbb (+176) LABEL043
+(+174) cba           1002    add bin r00 += #1
+(+176) cbb LABEL043: 1482    add bcd r04 += #1
+(+178) cbc           F885    jr[r04 ??] cc2 (+184) LABEL044
+(+17a) cbd           FC86    jr[r04 ??] cc4 (+188) LABEL045
+(+17c) cbe           B487    1011.0100.1000.0111
+(+17e) cbf           4FCE    inc r30
+(+180) cc0           CCC7    jump cc7 (+18e) LABEL046
+(+182) cc1 LABEL040: CCD7    jump cd7 (+1ae) LABEL047
+(+184) cc2 LABEL044: 88D2    load r06 <- #9
+(+186) cc3           CCD3    jump cd3 (+1a6) LABEL048
+(+188) cc4 LABEL045: 88CE    load r06 <- #7
+(+18a) cc5           CCC7    jump cc7 (+18e) LABEL046
+(+18c) cc6           88D4    load r06 <- #A
+(+18e) cc7 LABEL046: 11E2    add bin r15 += #1
+(+190) cc8           11C8    add bin r14 += #4
+(+192) cc9           B860    jr (r03)
+(+194) cca           CCCB    jump ccb (+196) LABEL049
+(+196) ccb LABEL049: CCCC    jump ccc (+198) LABEL050
+(+198) ccc LABEL050: 010F    add bin r08 += r15
+(+19a) ccd           CCD3    jump cd3 (+1a6) LABEL048
+(+19c) cce           010E    add bin r08 += r14
+(+19e) ccf           CCD3    jump cd3 (+1a6) LABEL048
+(+1a0) cd0           012F    add bin r09 += r15
+(+1a2) cd1           CCD3    jump cd3 (+1a6) LABEL048
+(+1a4) cd2           012E    add bin r09 += r14
+(+1a6) cd3 LABEL048: FBC3    jr[r30 ??] cd7 (+1ae) LABEL047
+(+1a8) cd4           ABE7    call be7 (rom)
+(+1aa) cd5           AF38    call f38 (+670) LABEL009
+(+1ac) cd6           C2DF    jump 2df (rom)
+(+1ae) cd7 LABEL047: 8C43    clr r02 r03
+(+1b0) cd8           8CC7    clr r06 r07
+(+1b2) cd9           8DC7    clr r14 r15
+(+1b4) cda           8EA7    clr r21 r22 r23
+(+1b6) cdb           8FC6    clr r30
+(+1b8) cdc           8822    load r01 <- #1
+(+1ba) cdd           8AC8    load r22 <- #4
+(+1bc) cde           3E10    select secondary reg bank 2
+(+1be) cdf           91A0    load secbank:r00 <- pribank:r13
+(+1c0) ce0           9509    load secbank:r09:08 <- pribank:r09:08
+(+1c2) ce1           CD53    jump d53 (+2a6) LABEL051
+(+1c4) ce2 LABEL005: 5728    0101.0111.0010.1000
+(+1c6) ce3           433C    and r25 &= #E
+(+1c8) ce4           D522    jpne d22 (+244) LABEL052
+(+1ca) ce5           3C18    select primary reg bank 3
+(+1cc) ce6           E6C1    j[1110.0110.110*] ce8 (+1d0) LABEL053
+(+1ce) ce7           CD22    jump d22 (+244) LABEL052
+(+1d0) ce8 LABEL053: 8FC6    clr r30
+(+1d2) ce9           EC02    j[1110.1100.000*] cec (+1d8) LABEL054
+(+1d4) cea           7801    load dispptr <- #01 (01)
+(+1d6) ceb           7C90    load (dispptr++) <- #20 ' '
+(+1d8) cec LABEL054: E802    j[1110.1000.000*] cef (+1de) LABEL055
+(+1da) ced           7803    load dispptr <- #03 (03)
+(+1dc) cee           7C90    load (dispptr++) <- #20 ' '
+(+1de) cef LABEL055: E402    j[1110.0100.000*] cf2 (+1e4) LABEL056
+(+1e0) cf0           7806    load dispptr <- #06 (06)
+(+1e2) cf1           7C90    load (dispptr++) <- #20 ' '
+(+1e4) cf2 LABEL056: E00F    j[1110.0000.000*] d02 (+204) LABEL057
+(+1e6) cf3           7820    load dispptr <- #08 (08)
+(+1e8) cf4           7C90    load (dispptr++) <- #20 ' '
+(+1ea) cf5           CD02    jump d02 (+204) LABEL057
+(+1ec) cf6 LABEL061: B860    jr (r03)
+(+1ee) cf7           CCF8    jump cf8 (+1f0) LABEL058
+(+1f0) cf8 LABEL058: CCF9    jump cf9 (+1f2) LABEL059
+(+1f2) cf9 LABEL059: EC08    j[1110.1100.000*] d02 (+204) LABEL057
+(+1f4) cfa           CD07    jump d07 (+20e) LABEL060
+(+1f6) cfb           E806    j[1110.1000.000*] d02 (+204) LABEL057
+(+1f8) cfc           CD07    jump d07 (+20e) LABEL060
+(+1fa) cfd           E404    j[1110.0100.000*] d02 (+204) LABEL057
+(+1fc) cfe           CD07    jump d07 (+20e) LABEL060
+(+1fe) cff           E002    j[1110.0000.000*] d02 (+204) LABEL057
+(+200) d00           CD07    jump d07 (+20e) LABEL060
+(+202) d01           8840    load r02 <- #0
+(+204) d02 LABEL057: 4C4A    inc r02
+(+206) d03           8062    load r03 <- r02
+(+208) d04           82E2    load r23 <- r02
+(+20a) d05           0077    add bin r03 += r23
+(+20c) d06           CCF6    jump cf6 (+1ec) LABEL061
+(+20e) d07 LABEL060: B840    jr (r02)
+(+210) d08           CD21    jump d21 (+242) LABEL062
+(+212) d09           CD0D    jump d0d (+21a) LABEL063
+(+214) d0a           CD12    jump d12 (+224) LABEL064
+(+216) d0b           CD17    jump d17 (+22e) LABEL065
+(+218) d0c           CD1C    jump d1c (+238) LABEL066
+(+21a) d0d LABEL063: AF52    call f52 (+6a4) LABEL039
+(+21c) d0e           7801    load dispptr <- #01 (01)
+(+21e) d0f           68C7    load (dispptr++) <- r07:06
+(+220) d10           7901    load dispptr <- #41
+(+222) d11           CD20    jump d20 (+240) LABEL067
+(+224) d12 LABEL064: AF52    call f52 (+6a4) LABEL039
+(+226) d13           7803    load dispptr <- #03 (03)
+(+228) d14           68C7    load (dispptr++) <- r07:06
+(+22a) d15           7903    load dispptr <- #43
+(+22c) d16           CD20    jump d20 (+240) LABEL067
+(+22e) d17 LABEL065: AF52    call f52 (+6a4) LABEL039
+(+230) d18           7806    load dispptr <- #06 (06)
+(+232) d19           68C7    load (dispptr++) <- r07:06
+(+234) d1a           7906    load dispptr <- #46
+(+236) d1b           CD20    jump d20 (+240) LABEL067
+(+238) d1c LABEL066: AF52    call f52 (+6a4) LABEL039
+(+23a) d1d           7820    load dispptr <- #08 (08)
+(+23c) d1e           68C7    load (dispptr++) <- r07:06
+(+23e) d1f           7920    load dispptr <- #48
+(+240) d20 LABEL067: 7C11    load (dispptr++) <- #01
+(+242) d21 LABEL062: 8AC6    load r22 <- #3
+(+244) d22 LABEL052: ABE7    call be7 (rom)
+(+246) d23           AF38    call f38 (+670) LABEL009
+(+248) d24           C383    jump 383 (rom)
+(+24a) d25 LABEL018: 3C10    select primary reg bank 2
+(+24c) d26           F365    jr[r27=0] d2c (+258) LABEL068
+(+24e) d27           79E6    load dispptr <- #7e
+(+250) d28           7C11    load (dispptr++) <- #01
+(+252) d29           F764    jr[r27!=0] d2e (+25c) LABEL069
+(+254) d2a           FB64    jr[r27 ??] d2f (+25e) LABEL070
+(+256) d2b           FF69    jr[r27 ??] d35 (+26a) LABEL071
+(+258) d2c LABEL068: 3C18    select primary reg bank 3
+(+25a) d2d           CD53    jump d53 (+2a6) LABEL051
+(+25c) d2e LABEL069: CD41    jump d41 (+282) LABEL072
+(+25e) d2f LABEL070: 4FA6    inc r30:29
+(+260) d30           63B6    0110.0011.1011.0110
+(+262) d31           F7EB    jr[r31!=0] d3d (+27a) LABEL073
+(+264) d32           EF0A    j[1110.1111.000*] d3d (+27a) LABEL073
+(+266) d33           FF27    jr[r25 ??] d3b (+276) LABEL074
+(+268) d34           CD3D    jump d3d (+27a) LABEL073
+(+26a) d35 LABEL071: 4FB6    dec r30:29
+(+26c) d36           63B6    0110.0011.1011.0110
+(+26e) d37           F7E5    jr[r31!=0] d3d (+27a) LABEL073
+(+270) d38           EF04    j[1110.1111.000*] d3d (+27a) LABEL073
+(+272) d39           FB21    jr[r25 ??] d3b (+276) LABEL074
+(+274) d3a           CD3D    jump d3d (+27a) LABEL073
+(+276) d3b LABEL074: 8B10    load r24 <- #8
+(+278) d3c           8BFE    load r31 <- #F
+(+27a) d3d LABEL073: 7C11    load (dispptr++) <- #01
+(+27c) d3e           13E2    add bin r31 += #1
+(+27e) d3f           FBEF    jr[r31 ??] d4f (+29e) LABEL075
+(+280) d40           CF04    jump f04 (+608) LABEL076
+(+282) d41 LABEL072: AF5C    call f5c (+6b8) LABEL077
+(+284) d42           833A    load r25 <- r26
+(+286) d43           FB62    jr[r27 ??] d46 (+28c) LABEL078
+(+288) d44           FF63    jr[r27 ??] d48 (+290) LABEL079
+(+28a) d45           CD49    jump d49 (+292) LABEL080
+(+28c) d46 LABEL078: 1322    add bin r25 += #1
+(+28e) d47           CD49    jump d49 (+292) LABEL080
+(+290) d48 LABEL079: 1B22    sub bin r25 -= #1
+(+292) d49 LABEL080: 63B6    0110.0011.1011.0110
+(+294) d4a           7C11    load (dispptr++) <- #01
+(+296) d4b           E761    j[1110.0111.011*] d4d (+29a) LABEL081
+(+298) d4c           CD4F    jump d4f (+29e) LABEL075
+(+29a) d4d LABEL081: 8BE0    load r31 <- #0
+(+29c) d4e           CF04    jump f04 (+608) LABEL076
+(+29e) d4f LABEL075: 3E18    select secondary reg bank 3
+(+2a0) d50           9059    load secbank:r25 <- pribank:r02
+(+2a2) d51           8F07    clr r24 r25 r26 r27 r28 r29 r30 r31
+(+2a4) d52           CF04    jump f04 (+608) LABEL076
+(+2a6) d53 LABEL051: F9C6    jr[r14 ??] d5a (+2b4) LABEL082
+(+2a8) d54           FDC6    jr[r14 ??] d5b (+2b6) LABEL083
+(+2aa) d55           B5C6    1011.0101.1100.0110
+(+2ac) d56           4EE7    inc r23
+(+2ae) d57           F6F4    jr[r23!=0] d6c (+2d8) LABEL084
+(+2b0) d58           FAE5    jr[r23 ??] d5e (+2bc) LABEL085
+(+2b2) d59           CDC1    jump dc1 (+382) LABEL086
+(+2b4) d5a LABEL082: CEA4    jump ea4 (+548) LABEL087
+(+2b6) d5b LABEL083: CE2D    jump e2d (+45a) LABEL088
+(+2b8) d5c           8AC0    load r22 <- #0
+(+2ba) d5d           CE23    jump e23 (+446) LABEL089
+(+2bc) d5e LABEL085: 81E5    load r15 <- r05
+(+2be) d5f           01E5    add bin r15 += r05
+(+2c0) d60           B9E0    jr (r15)
+(+2c2) d61           CD62    jump d62 (+2c4) LABEL090
+(+2c4) d62 LABEL090: CD63    jump d63 (+2c6) LABEL091
+(+2c6) d63 LABEL091: 7923    load dispptr <- #4b
+(+2c8) d64           CD6A    jump d6a (+2d4) LABEL092
+(+2ca) d65           7925    load dispptr <- #4d
+(+2cc) d66           CD6A    jump d6a (+2d4) LABEL092
+(+2ce) d67           7940    load dispptr <- #50
+(+2d0) d68           CD6A    jump d6a (+2d4) LABEL092
+(+2d2) d69           7942    load dispptr <- #52
+(+2d4) d6a LABEL092: 7C11    load (dispptr++) <- #01
+(+2d6) d6b           CF04    jump f04 (+608) LABEL076
+(+2d8) d6c LABEL084: 79E6    load dispptr <- #7e
+(+2da) d6d           7C11    load (dispptr++) <- #01
+(+2dc) d6e           7800    load dispptr <- #00 (00)
+(+2de) d6f           AFE0    call fe0 (+7c0) LABEL027
+(+2e0) d70           3C10    select primary reg bank 2
+(+2e2) d71           8CA6    clr r05 r06
+(+2e4) d72           89E0    load r15 <- #0
+(+2e6) d73           8882    load r04 <- #1
+(+2e8) d74           88F2    load r07 <- #9
+(+2ea) d75           81C8    load r14 <- r08
+(+2ec) d76 LABEL097: B9E0    jr (r15)
+(+2ee) d77           EDAE    j[1110.1101.101*] d86 (+30c) LABEL093
+(+2f0) d78           CD7E    jump d7e (+2fc) LABEL094
+(+2f2) d79           E9B1    j[1110.1001.101*] d8b (+316) LABEL095
+(+2f4) d7a           CD7E    jump d7e (+2fc) LABEL094
+(+2f6) d7b           E5AA    j[1110.0101.101*] d86 (+30c) LABEL093
+(+2f8) d7c           CD7E    jump d7e (+2fc) LABEL094
+(+2fa) d7d           E1AD    j[1110.0001.101*] d8b (+316) LABEL095
+(+2fc) d7e LABEL094: 11E4    add bin r15 += #2
+(+2fe) d7f           B5E3    1011.0101.1110.0011
+(+300) d80           1084    add bin r04 += #2
+(+302) d81           EDF9    j[1110.1101.111*] d9b (+336) LABEL096
+(+304) d82           CD76    jump d76 (+2ec) LABEL097
+(+306) d83           81C9    load r14 <- r09
+(+308) d84           1086    add bin r04 += #3
+(+30a) d85           CD76    jump d76 (+2ec) LABEL097
+(+30c) d86 LABEL093: E1C2    j[1110.0001.110*] d89 (+312) LABEL098
+(+30e) d87           E5CC    j[1110.0101.110*] d94 (+328) LABEL099
+(+310) d88           CD90    jump d90 (+320) LABEL100
+(+312) d89 LABEL098: E5CC    j[1110.0101.110*] d96 (+32c) LABEL101
+(+314) d8a           CD92    jump d92 (+324) LABEL102
+(+316) d8b LABEL095: E9C2    j[1110.1001.110*] d8e (+31c) LABEL103
+(+318) d8c           EDC7    j[1110.1101.110*] d94 (+328) LABEL099
+(+31a) d8d           CD90    jump d90 (+320) LABEL100
+(+31c) d8e LABEL103: EDC7    j[1110.1101.110*] d96 (+32c) LABEL101
+(+31e) d8f           CD92    jump d92 (+324) LABEL102
+(+320) d90 LABEL100: 88D0    load r06 <- #8
+(+322) d91           CD98    jump d98 (+330) LABEL104
+(+324) d92 LABEL102: 88D2    load r06 <- #9
+(+326) d93           CD98    jump d98 (+330) LABEL104
+(+328) d94 LABEL099: 88CE    load r06 <- #7
+(+32a) d95           CD98    jump d98 (+330) LABEL104
+(+32c) d96 LABEL101: 88D4    load r06 <- #A
+(+32e) d97           CD98    jump d98 (+330) LABEL104
+(+330) d98 LABEL104: 6095    0110.0000.1001.0101
+(+332) d99           68C7    load (dispptr++) <- r07:06
+(+334) d9a           CD7E    jump d7e (+2fc) LABEL094
+(+336) d9b LABEL096: 3C18    select primary reg bank 3
+(+338) d9c           EC03    j[1110.1100.000*] da0 (+340) LABEL105
+(+33a) d9d           E808    j[1110.1000.000*] da6 (+34c) LABEL106
+(+33c) d9e           E40D    j[1110.0100.000*] dac (+358) LABEL107
+(+33e) d9f           E012    j[1110.0000.000*] db2 (+364) LABEL108
+(+340) da0 LABEL105: 7901    load dispptr <- #41
+(+342) da1           7C11    load (dispptr++) <- #01
+(+344) da2           8842    load r02 <- #1
+(+346) da3           1C10    sub bcd r00 -= #8
+(+348) da4           88A2    load r05 <- #1
+(+34a) da5           CDB7    jump db7 (+36e) LABEL109
+(+34c) da6 LABEL106: 7903    load dispptr <- #43
+(+34e) da7           7C11    load (dispptr++) <- #01
+(+350) da8           8844    load r02 <- #2
+(+352) da9           1C08    sub bcd r00 -= #4
+(+354) daa           88A4    load r05 <- #2
+(+356) dab           CDB7    jump db7 (+36e) LABEL109
+(+358) dac LABEL107: 7906    load dispptr <- #46
+(+35a) dad           7C11    load (dispptr++) <- #01
+(+35c) dae           8846    load r02 <- #3
+(+35e) daf           1C04    sub bcd r00 -= #2
+(+360) db0           88A6    load r05 <- #3
+(+362) db1           CDB7    jump db7 (+36e) LABEL109
+(+364) db2 LABEL108: 7920    load dispptr <- #48
+(+366) db3           7C11    load (dispptr++) <- #01
+(+368) db4           8848    load r02 <- #4
+(+36a) db5           1C02    sub bcd r00 -= #1
+(+36c) db6           88A8    load r05 <- #4
+(+36e) db7 LABEL109: F426    jr[r01!=0] dbe (+37c) LABEL110
+(+370) db8           89E2    load r15 <- #1
+(+372) db9           8BC2    load r30 <- #1
+(+374) dba           7822    load dispptr <- #0a (10)
+(+376) dbb           8BEC    load r31 <- #6
+(+378) dbc           AF3B    call f3b (+676) LABEL028
+(+37a) dbd           CDC9    jump dc9 (+392) LABEL111
+(+37c) dbe LABEL110: ABE7    call be7 (rom)
+(+37e) dbf           AF38    call f38 (+670) LABEL009
+(+380) dc0           C2DF    jump 2df (rom)
+(+382) dc1 LABEL086: 79E6    load dispptr <- #7e
+(+384) dc2           7C11    load (dispptr++) <- #01
+(+386) dc3           7800    load dispptr <- #00 (00)
+(+388) dc4           8BF0    load r31 <- #8
+(+38a) dc5           AF3B    call f3b (+676) LABEL028
+(+38c) dc6           81F7    load r15 <- r23
+(+38e) dc7           19E4    sub bin r15 -= #2
+(+390) dc8           EDF3    j[1110.1101.111*] ddc (+3b8) LABEL112
+(+392) dc9 LABEL111: 808F    load r04 <- r15
+(+394) dca           01E4    add bin r15 += r04
+(+396) dcb           B9E0    jr (r15)
+(+398) dcc           CDCD    jump dcd (+39a) LABEL113
+(+39a) dcd LABEL113: CDCE    jump dce (+39c) LABEL114
+(+39c) dce LABEL114: 8B80    load r28 <- #0
+(+39e) dcf           CDEF    jump def (+3de) LABEL115
+(+3a0) dd0 LABEL169: 8390    load r28 <- r16
+(+3a2) dd1           CDEF    jump def (+3de) LABEL115
+(+3a4) dd2 LABEL170: 8391    load r28 <- r17
+(+3a6) dd3           CDEF    jump def (+3de) LABEL115
+(+3a8) dd4 LABEL171: 8392    load r28 <- r18
+(+3aa) dd5           CDEF    jump def (+3de) LABEL115
+(+3ac) dd6 LABEL172: 8393    load r28 <- r19
+(+3ae) dd7           CDEF    jump def (+3de) LABEL115
+(+3b0) dd8 LABEL173: 8394    load r28 <- r20
+(+3b2) dd9           CDEF    jump def (+3de) LABEL115
+(+3b4) dda LABEL174: 8398    load r28 <- r24
+(+3b6) ddb           CDEF    jump def (+3de) LABEL115
+(+3b8) ddc LABEL112: 19F0    sub bin r15 -= #8
+(+3ba) ddd           808F    load r04 <- r15
+(+3bc) dde           01E4    add bin r15 += r04
+(+3be) ddf           B9E0    jr (r15)
+(+3c0) de0 LABEL175: 8399    load r28 <- r25
+(+3c2) de1           CDEF    jump def (+3de) LABEL115
+(+3c4) de2 LABEL176: 839A    load r28 <- r26
+(+3c6) de3           CDEF    jump def (+3de) LABEL115
+(+3c8) de4 LABEL177: 839B    load r28 <- r27
+(+3ca) de5           CDEF    jump def (+3de) LABEL115
+(+3cc) de6 LABEL178: 89C2    load r14 <- #1
+(+3ce) de7           CE1D    jump e1d (+43a) LABEL116
+(+3d0) de8 LABEL179: 7866    load dispptr <- #1e (30)
+(+3d2) de9           AFE0    call fe0 (+7c0) LABEL027
+(+3d4) dea           89C4    load r14 <- #2
+(+3d6) deb           8BC0    load r30 <- #0
+(+3d8) dec           F2A1    jr[r21=0] dee (+3dc) LABEL117
+(+3da) ded           CE5B    jump e5b (+4b6) LABEL118
+(+3dc) dee LABEL117: CF04    jump f04 (+608) LABEL076
+(+3de) def LABEL115: 3E10    select secondary reg bank 2
+(+3e0) df0           919C    load secbank:r28 <- pribank:r12
+(+3e2) df1           17C2    add bcd r30 += #1
+(+3e4) df2           BBC0    jr (r30)
+(+3e6) df3           CDF4    jump df4 (+3e8) LABEL119
+(+3e8) df4 LABEL119: CDF8    jump df8 (+3f0) LABEL120
+(+3ea) df5           CDFC    jump dfc (+3f8) LABEL121
+(+3ec) df6           CE00    jump e00 (+400) LABEL122
+(+3ee) df7           CE04    jump e04 (+408) LABEL123
+(+3f0) df8 LABEL120: 3C10    select primary reg bank 2
+(+3f2) df9           8842    load r02 <- #1
+(+3f4) dfa           8860    load r03 <- #0
+(+3f6) dfb           CE07    jump e07 (+40e) LABEL124
+(+3f8) dfc LABEL121: 3C10    select primary reg bank 2
+(+3fa) dfd           8856    load r02 <- #B
+(+3fc) dfe           8860    load r03 <- #0
+(+3fe) dff           CE07    jump e07 (+40e) LABEL124
+(+400) e00 LABEL122: 3C10    select primary reg bank 2
+(+402) e01           884A    load r02 <- #5
+(+404) e02           8862    load r03 <- #1
+(+406) e03           CE07    jump e07 (+40e) LABEL124
+(+408) e04 LABEL123: 3C10    select primary reg bank 2
+(+40a) e05           885E    load r02 <- #F
+(+40c) e06           8862    load r03 <- #1
+(+40e) e07 LABEL124: F193    jr[r12=0] e1b (+436) LABEL125
+(+410) e08           F583    jr[r12!=0] e0c (+418) LABEL126
+(+412) e09           F986    jr[r12 ??] e10 (+420) LABEL127
+(+414) e0a           FD8B    jr[r12 ??] e16 (+42c) LABEL128
+(+416) e0b           B580    1011.0101.1000.0000
+(+418) e0c LABEL126: 6053    0110.0000.0101.0011
+(+41a) e0d           AF43    call f43 (+686) LABEL036
+(+41c) e0e           E987    j[1110.1001.100*] e16 (+42c) LABEL128
+(+41e) e0f           CE1B    jump e1b (+436) LABEL125
+(+420) e10 LABEL127: 8946    load r10 <- #3
+(+422) e11           8960    load r11 <- #0
+(+424) e12           204B    add bin r03:02 += r11:10
+(+426) e13           6053    0110.0000.0101.0011
+(+428) e14           AF47    call f47 (+68e) LABEL038
+(+42a) e15           CE1B    jump e1b (+436) LABEL125
+(+42c) e16 LABEL128: 8A4A    load r18 <- #5
+(+42e) e17           8A60    load r19 <- #0
+(+430) e18           2053    add bin r03:02 += r19:18
+(+432) e19           6053    0110.0000.0101.0011
+(+434) e1a           AF43    call f43 (+686) LABEL036
+(+436) e1b LABEL125: 3C18    select primary reg bank 3
+(+438) e1c           CE73    jump e73 (+4e6) LABEL129
+(+43a) e1d LABEL116: 17C2    add bcd r30 += #1
+(+43c) e1e           7844    load dispptr <- #14 (20)
+(+43e) e1f           FFC1    jr[r30 ??] e21 (+442) LABEL130
+(+440) e20           7866    load dispptr <- #1e (30)
+(+442) e21 LABEL130: 8BE4    load r31 <- #2
+(+444) e22           AF4A    call f4a (+694) LABEL131
+(+446) e23 LABEL089: F2A8    jr[r21=0] e2c (+458) LABEL132
+(+448) e24           8882    load r04 <- #1
+(+44a) e25           EEAE    j[1110.1110.101*] e34 (+468) LABEL133
+(+44c) e26 LABEL147: 1482    add bcd r04 += #1
+(+44e) e27           EAB1    j[1110.1010.101*] e39 (+472) LABEL134
+(+450) e28 LABEL148: 1482    add bcd r04 += #1
+(+452) e29           E6B4    j[1110.0110.101*] e3e (+47c) LABEL135
+(+454) e2a LABEL149: 1482    add bcd r04 += #1
+(+456) e2b           E2B7    j[1110.0010.101*] e43 (+486) LABEL136
+(+458) e2c LABEL132: CE73    jump e73 (+4e6) LABEL129
+(+45a) e2d LABEL088: 79E6    load dispptr <- #7e
+(+45c) e2e           7C11    load (dispptr++) <- #01
+(+45e) e2f           8BC6    load r30 <- #3
+(+460) e30           F443    jr[r02!=0] e34 (+468) LABEL133
+(+462) e31           F847    jr[r02 ??] e39 (+472) LABEL134
+(+464) e32           FC4B    jr[r02 ??] e3e (+47c) LABEL135
+(+466) e33           B44F    1011.0100.0100.1111
+(+468) e34 LABEL133: 7845    load dispptr <- #15 (21)
+(+46a) e35           FFC1    jr[r30 ??] e37 (+46e) LABEL137
+(+46c) e36           7867    load dispptr <- #1f (31)
+(+46e) e37 LABEL137: 838A    load r28 <- r10
+(+470) e38           CE47    jump e47 (+48e) LABEL138
+(+472) e39 LABEL134: 7847    load dispptr <- #17 (23)
+(+474) e3a           FFC1    jr[r30 ??] e3c (+478) LABEL139
+(+476) e3b           7881    load dispptr <- #21 (33)
+(+478) e3c LABEL139: 838B    load r28 <- r11
+(+47a) e3d           CE47    jump e47 (+48e) LABEL138
+(+47c) e3e LABEL135: 7862    load dispptr <- #1a (26)
+(+47e) e3f           FFC1    jr[r30 ??] e41 (+482) LABEL140
+(+480) e40           7884    load dispptr <- #24 (36)
+(+482) e41 LABEL140: 838C    load r28 <- r12
+(+484) e42           CE47    jump e47 (+48e) LABEL138
+(+486) e43 LABEL136: 7864    load dispptr <- #1c (28)
+(+488) e44           FFC1    jr[r30 ??] e46 (+48c) LABEL141
+(+48a) e45           7886    load dispptr <- #26 (38)
+(+48c) e46 LABEL141: 838D    load r28 <- r13
+(+48e) e47 LABEL138: 81FC    load r15 <- r28
+(+490) e48           038F    add bin r28 += r15
+(+492) e49           BB80    jr (r28)
+(+494) e4a           CE4B    jump e4b (+496) LABEL142
+(+496) e4b LABEL142: CE4C    jump e4c (+498) LABEL143
+(+498) e4c LABEL143: 7CD1    load (dispptr++) <- #31 '1'
+(+49a) e4d           CE53    jump e53 (+4a6) LABEL144
+(+49c) e4e           7CD2    load (dispptr++) <- #32 '2'
+(+49e) e4f           CE53    jump e53 (+4a6) LABEL144
+(+4a0) e50           7CD3    load (dispptr++) <- #33 '3'
+(+4a2) e51           CE53    jump e53 (+4a6) LABEL144
+(+4a4) e52           7CD4    load (dispptr++) <- #34 '4'
+(+4a6) e53 LABEL144: FDC6    jr[r14 ??] e5a (+4b4) LABEL145
+(+4a8) e54           B880    jr (r04)
+(+4aa) e55           CE56    jump e56 (+4ac) LABEL146
+(+4ac) e56 LABEL146: CE26    jump e26 (+44c) LABEL147
+(+4ae) e57           CE28    jump e28 (+450) LABEL148
+(+4b0) e58           CE2A    jump e2a (+454) LABEL149
+(+4b2) e59           CE73    jump e73 (+4e6) LABEL129
+(+4b4) e5a LABEL145: CEE7    jump ee7 (+5ce) LABEL150
+(+4b6) e5b LABEL118: EEA1    j[1110.1110.101*] e5d (+4ba) LABEL151
+(+4b8) e5c           CE61    jump e61 (+4c2) LABEL152
+(+4ba) e5d LABEL151: 77D0    load memptr <- #7d0
+(+4bc) e5e           64CF    load r07:r06 <- (memptr++)
+(+4be) e5f           7867    load dispptr <- #1f (31)
+(+4c0) e60           68C7    load (dispptr++) <- r07:06
+(+4c2) e61 LABEL152: EAA1    j[1110.1010.101*] e63 (+4c6) LABEL153
+(+4c4) e62           CE67    jump e67 (+4ce) LABEL154
+(+4c6) e63 LABEL153: 77D1    load memptr <- #7d1
+(+4c8) e64           64CF    load r07:r06 <- (memptr++)
+(+4ca) e65           7881    load dispptr <- #21 (33)
+(+4cc) e66           68C7    load (dispptr++) <- r07:06
+(+4ce) e67 LABEL154: E6A1    j[1110.0110.101*] e69 (+4d2) LABEL155
+(+4d0) e68           CE6D    jump e6d (+4da) LABEL156
+(+4d2) e69 LABEL155: 77D2    load memptr <- #7d2
+(+4d4) e6a           64CF    load r07:r06 <- (memptr++)
+(+4d6) e6b           7884    load dispptr <- #24 (36)
+(+4d8) e6c           68C7    load (dispptr++) <- r07:06
+(+4da) e6d LABEL156: E2A1    j[1110.0010.101*] e6f (+4de) LABEL157
+(+4dc) e6e           CE73    jump e73 (+4e6) LABEL129
+(+4de) e6f LABEL157: 77D3    load memptr <- #7d3
+(+4e0) e70           64CF    load r07:r06 <- (memptr++)
+(+4e2) e71           7886    load dispptr <- #26 (38)
+(+4e4) e72           68C7    load (dispptr++) <- r07:06
+(+4e6) e73 LABEL129: B5C5    1011.0101.1100.0101
+(+4e8) e74           F7CA    jr[r30!=0] e7f (+4fe) LABEL158
+(+4ea) e75           FBC6    jr[r30 ??] e7c (+4f8) LABEL159
+(+4ec) e76           FFC7    jr[r30 ??] e7e (+4fc) LABEL160
+(+4ee) e77           8BC0    load r30 <- #0
+(+4f0) e78           CF04    jump f04 (+608) LABEL076
+(+4f2) e79           B421    1011.0100.0010.0001
+(+4f4) e7a           CEFD    jump efd (+5fa) LABEL161
+(+4f6) e7b           CEA4    jump ea4 (+548) LABEL087
+(+4f8) e7c LABEL159: 3E10    select secondary reg bank 2
+(+4fa) e7d           939C    load secbank:r28 <- pribank:r28
+(+4fc) e7e LABEL160: CE91    jump e91 (+522) LABEL162
+(+4fe) e7f LABEL158: 3E10    select secondary reg bank 2
+(+500) e80           9342    load secbank:r02 <- pribank:r26
+(+502) e81           81E2    load r15 <- r02
+(+504) e82           01E2    add bin r15 += r02
+(+506) e83           B9E0    jr (r15)
+(+508) e84           CE85    jump e85 (+50a) LABEL163
+(+50a) e85 LABEL163: CE86    jump e86 (+50c) LABEL164
+(+50c) e86 LABEL164: 7901    load dispptr <- #41
+(+50e) e87           CE8D    jump e8d (+51a) LABEL165
+(+510) e88           7903    load dispptr <- #43
+(+512) e89           CE8D    jump e8d (+51a) LABEL165
+(+514) e8a           7906    load dispptr <- #46
+(+516) e8b           CE8D    jump e8d (+51a) LABEL165
+(+518) e8c           7920    load dispptr <- #48
+(+51a) e8d LABEL165: 7C11    load (dispptr++) <- #01
+(+51c) e8e           3C10    select primary reg bank 2
+(+51e) e8f           8B62    load r27 <- #1
+(+520) e90           3C18    select primary reg bank 3
+(+522) e91 LABEL162: 89E4    load r15 <- #2
+(+524) e92           F6E1    jr[r23!=0] e94 (+528) LABEL166
+(+526) e93           81F7    load r15 <- r23
+(+528) e94 LABEL166: 19E4    sub bin r15 -= #2
+(+52a) e95           01FE    add bin r15 += r30
+(+52c) e96           B9E0    jr (r15)
+(+52e) e97           CE98    jump e98 (+530) LABEL167
+(+530) e98 LABEL167: CE99    jump e99 (+532) LABEL168
+(+532) e99 LABEL168: CDD0    jump dd0 (+3a0) LABEL169
+(+534) e9a           CDD2    jump dd2 (+3a4) LABEL170
+(+536) e9b           CDD4    jump dd4 (+3a8) LABEL171
+(+538) e9c           CDD6    jump dd6 (+3ac) LABEL172
+(+53a) e9d           CDD8    jump dd8 (+3b0) LABEL173
+(+53c) e9e           CDDA    jump dda (+3b4) LABEL174
+(+53e) e9f           CDE0    jump de0 (+3c0) LABEL175
+(+540) ea0           CDE2    jump de2 (+3c4) LABEL176
+(+542) ea1           CDE4    jump de4 (+3c8) LABEL177
+(+544) ea2           CDE6    jump de6 (+3cc) LABEL178
+(+546) ea3           CDE8    jump de8 (+3d0) LABEL179
+(+548) ea4 LABEL087: 88F2    load r07 <- #9
+(+54a) ea5           F4A2    jr[r05!=0] ea8 (+550) LABEL180
+(+54c) ea6           F8AA    jr[r05 ??] eb1 (+562) LABEL181
+(+54e) ea7           CEAE    jump eae (+55c) LABEL182
+(+550) ea8 LABEL180: 82E8    load r23 <- r08
+(+552) ea9 LABEL188: E2E2    j[1110.0010.111*] eac (+558) LABEL183
+(+554) eaa           E6F0    j[1110.0110.111*] ebb (+576) LABEL184
+(+556) eab           CEB7    jump eb7 (+56e) LABEL185
+(+558) eac LABEL183: E6F0    j[1110.0110.111*] ebd (+57a) LABEL186
+(+55a) ead           CEB9    jump eb9 (+572) LABEL187
+(+55c) eae LABEL182: 82E9    load r23 <- r09
+(+55e) eaf           B4A2    1011.0100.1010.0010
+(+560) eb0           CEA9    jump ea9 (+552) LABEL188
+(+562) eb1 LABEL181: 82E8    load r23 <- r08
+(+564) eb2           EAE2    j[1110.1010.111*] eb5 (+56a) LABEL189
+(+566) eb3           EEE7    j[1110.1110.111*] ebb (+576) LABEL184
+(+568) eb4           CEB7    jump eb7 (+56e) LABEL185
+(+56a) eb5 LABEL189: EEE7    j[1110.1110.111*] ebd (+57a) LABEL186
+(+56c) eb6           CEB9    jump eb9 (+572) LABEL187
+(+56e) eb7 LABEL185: 88D0    load r06 <- #8
+(+570) eb8           CEBE    jump ebe (+57c) LABEL190
+(+572) eb9 LABEL187: 88D2    load r06 <- #9
+(+574) eba           CEBE    jump ebe (+57c) LABEL190
+(+576) ebb LABEL184: 88CE    load r06 <- #7
+(+578) ebc           CEBE    jump ebe (+57c) LABEL190
+(+57a) ebd LABEL186: 88D4    load r06 <- #A
+(+57c) ebe LABEL190: 7923    load dispptr <- #4b
+(+57e) ebf           AF53    call f53 (+6a6) LABEL191
+(+580) ec0           B840    jr (r02)
+(+582) ec1           CEC2    jump ec2 (+584) LABEL192
+(+584) ec2 LABEL192: CEC6    jump ec6 (+58c) LABEL193
+(+586) ec3           CECD    jump ecd (+59a) LABEL194
+(+588) ec4           CED4    jump ed4 (+5a8) LABEL195
+(+58a) ec5           CEDB    jump edb (+5b6) LABEL196
+(+58c) ec6 LABEL193: 7945    load dispptr <- #55
+(+58e) ec7           7C11    load (dispptr++) <- #01
+(+590) ec8           7867    load dispptr <- #1f (31)
+(+592) ec9           68C7    load (dispptr++) <- r07:06
+(+594) eca           12B0    add bin r21 += #8
+(+596) ecb           77D0    load memptr <- #7d0
+(+598) ecc           CEE1    jump ee1 (+5c2) LABEL197
+(+59a) ecd LABEL194: 7947    load dispptr <- #57
+(+59c) ece           7C11    load (dispptr++) <- #01
+(+59e) ecf           7881    load dispptr <- #21 (33)
+(+5a0) ed0           68C7    load (dispptr++) <- r07:06
+(+5a2) ed1           12A8    add bin r21 += #4
+(+5a4) ed2           77D1    load memptr <- #7d1
+(+5a6) ed3           CEE1    jump ee1 (+5c2) LABEL197
+(+5a8) ed4 LABEL195: 7962    load dispptr <- #5a
+(+5aa) ed5           7C11    load (dispptr++) <- #01
+(+5ac) ed6           7884    load dispptr <- #24 (36)
+(+5ae) ed7           68C7    load (dispptr++) <- r07:06
+(+5b0) ed8           12A4    add bin r21 += #2
+(+5b2) ed9           77D2    load memptr <- #7d2
+(+5b4) eda           CEE1    jump ee1 (+5c2) LABEL197
+(+5b6) edb LABEL196: 7964    load dispptr <- #5c
+(+5b8) edc           7C11    load (dispptr++) <- #01
+(+5ba) edd           7886    load dispptr <- #26 (38)
+(+5bc) ede           68C7    load (dispptr++) <- r07:06
+(+5be) edf           12A2    add bin r21 += #1
+(+5c0) ee0           77D3    load memptr <- #7d3
+(+5c2) ee1 LABEL197: B43B    1011.0100.0011.1011
+(+5c4) ee2           8EE7    clr r23
+(+5c6) ee3           64C7    load (memptr++) <- r07:r06 
+(+5c8) ee4           89C6    load r14 <- #3
+(+5ca) ee5           1022    add bin r01 += #1
+(+5cc) ee6           CF04    jump f04 (+608) LABEL076
+(+5ce) ee7 LABEL150: 8DC6    clr r14
+(+5d0) ee8           3C00    select primary reg bank 0
+(+5d2) ee9           A7FD    call 7fd (rom)
+(+5d4) eea           EEA1    j[1110.1110.101*] eec (+5d8) LABEL198
+(+5d6) eeb           CEED    jump eed (+5da) LABEL199
+(+5d8) eec LABEL198: 5D0F    0101.1101.0000.1111
+(+5da) eed LABEL199: 3C18    select primary reg bank 3
+(+5dc) eee           F007    jr[r00=0] ef6 (+5ec) LABEL200
+(+5de) eef           B439    1011.0100.0011.1001
+(+5e0) ef0           8AC0    load r22 <- #0
+(+5e2) ef1           3C08    select primary reg bank 1
+(+5e4) ef2           AF32    call f32 (+664) LABEL201
+(+5e6) ef3           3C10    select primary reg bank 2
+(+5e8) ef4           8F00    clr r24
+(+5ea) ef5           CEFA    jump efa (+5f4) LABEL202
+(+5ec) ef6 LABEL200: 8822    load r01 <- #1
+(+5ee) ef7 LABEL206: 88A8    load r05 <- #4
+(+5f0) ef8           89C8    load r14 <- #4
+(+5f2) ef9           8ABE    load r21 <- #F
+(+5f4) efa LABEL202: ABE7    call be7 (rom)
+(+5f6) efb           AF38    call f38 (+670) LABEL009
+(+5f8) efc           C190    jump 190 (rom)
+(+5fa) efd LABEL161: 7945    load dispptr <- #55
+(+5fc) efe           AF53    call f53 (+6a6) LABEL191
+(+5fe) eff           8C84    clr r04
+(+600) f00           8AC2    load r22 <- #1
+(+602) f01           5C8F    0101.1100.1000.1111
+(+604) f02           8822    load r01 <- #1
+(+606) f03           CEFA    jump efa (+5f4) LABEL202
+(+608) f04 LABEL076: 3C00    select primary reg bank 0
+(+60a) f05           EEA1    j[1110.1110.101*] f07 (+60e) LABEL203
+(+60c) f06           CF08    jump f08 (+610) LABEL204
+(+60e) f07 LABEL203: 5C4F    0101.1100.0100.1111
+(+610) f08 LABEL204: CEFA    jump efa (+5f4) LABEL202
+(+612) f09           E2A2    j[1110.0010.101*] f0c (+618) LABEL205
+(+614) f0a           8848    load r02 <- #4
+(+616) f0b           CEF7    jump ef7 (+5ee) LABEL206
+(+618) f0c LABEL205: E6A2    j[1110.0110.101*] f0f (+61e) LABEL207
+(+61a) f0d           8846    load r02 <- #3
+(+61c) f0e           CEF7    jump ef7 (+5ee) LABEL206
+(+61e) f0f LABEL207: EAA2    j[1110.1010.101*] f12 (+624) LABEL208
+(+620) f10           8844    load r02 <- #2
+(+622) f11           CEF7    jump ef7 (+5ee) LABEL206
+(+624) f12 LABEL208: 8842    load r02 <- #1
+(+626) f13           CEF7    jump ef7 (+5ee) LABEL206
+(+628) f14 LABEL008: 3C10    select primary reg bank 2
+(+62a) f15           8EE7    clr r23
+(+62c) f16           3C18    select primary reg bank 3
+(+62e) f17           A8F2    call 8f2 (rom)
+(+630) f18           3C08    select primary reg bank 1
+(+632) f19           AF34    call f34 (+668) LABEL209
+(+634) f1a           8940    load r10 <- #0
+(+636) f1b           5C8F    0101.1100.1000.1111
+(+638) f1c           EC21    j[1110.1100.001*] f1e (+63c) LABEL210
+(+63a) f1d           C243    jump 243 (rom)
+(+63c) f1e LABEL210: C190    jump 190 (rom)
+(+63e) f1f LABEL002: 3C10    select primary reg bank 2
+(+640) f20           EB01    j[1110.1011.000*] f22 (+644) LABEL211
+(+642) f21           CF2C    jump f2c (+658) LABEL212
+(+644) f22 LABEL211: 3C18    select primary reg bank 3
+(+646) f23           8AC8    load r22 <- #4
+(+648) f24           3C08    select primary reg bank 1
+(+64a) f25           AF36    call f36 (+66c) LABEL213
+(+64c) f26           5C8F    0101.1100.1000.1111
+(+64e) f27 LABEL214: ABE7    call be7 (rom)
+(+650) f28           AF38    call f38 (+670) LABEL009
+(+652) f29           3C00    select primary reg bank 0
+(+654) f2a           8A70    load r19 <- #8
+(+656) f2b           C11A    jump 11a (rom)
+(+658) f2c LABEL212: 3C10    select primary reg bank 2
+(+65a) f2d           4F00    inc r24
+(+65c) f2e           CF27    jump f27 (+64e) LABEL214
+(+65e) f2f           B000    ret
+(+660) f30 LABEL010: 4570    or r11 |= #8
+(+662) f31           CF7D    jump f7d (+6fa) LABEL215
+(+664) f32 LABEL201: 4568    or r11 |= #4
+(+666) f33           CF7D    jump f7d (+6fa) LABEL215
+(+668) f34 LABEL209: 416E    and r11 &= #7
+(+66a) f35           CF7D    jump f7d (+6fa) LABEL215
+(+66c) f36 LABEL213: 4176    and r11 &= #B
+(+66e) f37           CF7D    jump f7d (+6fa) LABEL215
+(+670) f38 LABEL009: 3C00    select primary reg bank 0
+(+672) f39           427C    and r19 &= #E
+(+674) f3a           CF7D    jump f7d (+6fa) LABEL215
+(+676) f3b LABEL028: 7C90    load (dispptr++) <- #20 ' '
+(+678) f3c           7F96    load (dispptr++) <- #e6
+(+67a) f3d           7C90    load (dispptr++) <- #20 ' '
+(+67c) f3e           7F95    load (dispptr++) <- #e5
+(+67e) f3f           7C90    load (dispptr++) <- #20 ' '
+(+680) f40           1BE2    sub bin r31 -= #1
+(+682) f41           D73B    jpne f3b (+676) LABEL028
+(+684) f42           CF7D    jump f7d (+6fa) LABEL215
+(+686) f43 LABEL036: 7FF6    load (dispptr++) <- #fe
+(+688) f44           7FD1    load (dispptr++) <- #f1
+(+68a) f45           7FF5    load (dispptr++) <- #fd
+(+68c) f46           CF7D    jump f7d (+6fa) LABEL215
+(+68e) f47 LABEL038: 7FD1    load (dispptr++) <- #f1
+(+690) f48           7FD1    load (dispptr++) <- #f1
+(+692) f49           CF7D    jump f7d (+6fa) LABEL215
+(+694) f4a LABEL131: 7C90    load (dispptr++) <- #20 ' '
+(+696) f4b           7FF7    load (dispptr++) <- #ff
+(+698) f4c           7C90    load (dispptr++) <- #20 ' '
+(+69a) f4d           7FF7    load (dispptr++) <- #ff
+(+69c) f4e           7C90    load (dispptr++) <- #20 ' '
+(+69e) f4f           1BE2    sub bin r31 -= #1
+(+6a0) f50           D74A    jpne f4a (+694) LABEL131
+(+6a2) f51           CF7D    jump f7d (+6fa) LABEL215
+(+6a4) f52 LABEL039: 7901    load dispptr <- #41
+(+6a6) f53 LABEL191: 7C10    load (dispptr++) <- #00
+(+6a8) f54           7C10    load (dispptr++) <- #00
+(+6aa) f55           7C10    load (dispptr++) <- #00
+(+6ac) f56           7C10    load (dispptr++) <- #00
+(+6ae) f57           7C10    load (dispptr++) <- #00
+(+6b0) f58           7C10    load (dispptr++) <- #00
+(+6b2) f59           7C10    load (dispptr++) <- #00
+(+6b4) f5a           7C10    load (dispptr++) <- #00
+(+6b6) f5b           CF7D    jump f7d (+6fa) LABEL215
+(+6b8) f5c LABEL077: 8B62    load r27 <- #1
+(+6ba) f5d           BB40    jr (r26)
+(+6bc) f5e           CF5F    jump f5f (+6be) LABEL216
+(+6be) f5f LABEL216: CF63    jump f63 (+6c6) LABEL217
+(+6c0) f60           CF68    jump f68 (+6d0) LABEL218
+(+6c2) f61           CF6E    jump f6e (+6dc) LABEL219
+(+6c4) f62           CF74    jump f74 (+6e8) LABEL220
+(+6c6) f63 LABEL217: 8BB6    load r29 <- #B
+(+6c8) f64           8BC8    load r30 <- #4
+(+6ca) f65           F793    jr[r28!=0] f79 (+6f2) LABEL221
+(+6cc) f66           B792    1011.0111.1001.0010
+(+6ce) f67           CF7C    jump f7c (+6f8) LABEL222
+(+6d0) f68 LABEL218: 8BBA    load r29 <- #D
+(+6d2) f69           8BC8    load r30 <- #4
+(+6d4) f6a           F790    jr[r28!=0] f7b (+6f6) LABEL223
+(+6d6) f6b           FB8D    jr[r28 ??] f79 (+6f2) LABEL221
+(+6d8) f6c           B78E    1011.0111.1000.1110
+(+6da) f6d           CF7C    jump f7c (+6f8) LABEL222
+(+6dc) f6e LABEL219: 8BA0    load r29 <- #0
+(+6de) f6f           8BCA    load r30 <- #5
+(+6e0) f70           FB8A    jr[r28 ??] f7b (+6f6) LABEL223
+(+6e2) f71           FF87    jr[r28 ??] f79 (+6f2) LABEL221
+(+6e4) f72           B786    1011.0111.1000.0110
+(+6e6) f73           CF7C    jump f7c (+6f8) LABEL222
+(+6e8) f74 LABEL220: 8BA4    load r29 <- #2
+(+6ea) f75           8BCA    load r30 <- #5
+(+6ec) f76           FF84    jr[r28 ??] f7b (+6f6) LABEL223
+(+6ee) f77           B783    1011.0111.1000.0011
+(+6f0) f78           CF7C    jump f7c (+6f8) LABEL222
+(+6f2) f79 LABEL221: 8B64    load r27 <- #2
+(+6f4) f7a           CF7C    jump f7c (+6f8) LABEL222
+(+6f6) f7b LABEL223: 8B66    load r27 <- #3
+(+6f8) f7c LABEL222: CF7D    jump f7d (+6fa) LABEL215
+(+6fa) f7d LABEL215: B000    ret
+(+6fc) f7e LABEL023: 3C10    select primary reg bank 2
+(+6fe) f7f           3E00    select secondary reg bank 0
+(+700) f80           98ED    load pribank:r07 <- secbank:r13
+(+702) f81           98CE    load pribank:r06 <- secbank:r14
+(+704) f82           21C7    add bin r15:14 += r07:06
+(+706) f83           01E6    add bin r15 += r06
+(+708) f84           01EE    add bin r15 += r14
+(+70a) f85           84CF    load r07:06 <- r15:14
+(+70c) f86           CFDF    jump fdf (+7be) LABEL224
+(+70e) f87 LABEL025: 3C10    select primary reg bank 2
+(+710) f88 LABEL226: FA0A    jr[r16 ??] f93 (+726) LABEL225
+(+712) f89           FA29    jr[r17 ??] f93 (+726) LABEL225
+(+714) f8a           FA48    jr[r18 ??] f93 (+726) LABEL225
+(+716) f8b           FA67    jr[r19 ??] f93 (+726) LABEL225
+(+718) f8c           FA86    jr[r20 ??] f93 (+726) LABEL225
+(+71a) f8d           FB05    jr[r24 ??] f93 (+726) LABEL225
+(+71c) f8e           FB24    jr[r25 ??] f93 (+726) LABEL225
+(+71e) f8f           FB43    jr[r26 ??] f93 (+726) LABEL225
+(+720) f90           FB62    jr[r27 ??] f93 (+726) LABEL225
+(+722) f91           8A64    load r19 <- #2
+(+724) f92           8B04    load r24 <- #2
+(+726) f93 LABEL225: B60B    1011.0110.0000.1011
+(+728) f94           B62A    1011.0110.0010.1010
+(+72a) f95           B649    1011.0110.0100.1001
+(+72c) f96           B668    1011.0110.0110.1000
+(+72e) f97           B687    1011.0110.1000.0111
+(+730) f98           B706    1011.0111.0000.0110
+(+732) f99           B725    1011.0111.0010.0101
+(+734) f9a           B744    1011.0111.0100.0100
+(+736) f9b           B763    1011.0111.0110.0011
+(+738) f9c           8A48    load r18 <- #4
+(+73a) f9d           8B28    load r25 <- #4
+(+73c) f9e           CF88    jump f88 (+710) LABEL226
+(+73e) f9f           CFDF    jump fdf (+7be) LABEL224
+(+740) fa0 LABEL024: 3C10    select primary reg bank 2
+(+742) fa1 LABEL228: 8946    load r10 <- #3
+(+744) fa2           4CF7    dec r07
+(+746) fa3           DBBE    jplt fbe (+77c) LABEL227
+(+748) fa4           D3BE    jpeq fbe (+77c) LABEL227
+(+74a) fa5           8944    load r10 <- #2
+(+74c) fa6           4CF7    dec r07
+(+74e) fa7           D3BE    jpeq fbe (+77c) LABEL227
+(+750) fa8           8940    load r10 <- #0
+(+752) fa9           4CF7    dec r07
+(+754) faa           D3BE    jpeq fbe (+77c) LABEL227
+(+756) fab           8942    load r10 <- #1
+(+758) fac           4CF7    dec r07
+(+75a) fad           D3BE    jpeq fbe (+77c) LABEL227
+(+75c) fae           8948    load r10 <- #4
+(+75e) faf           4CF7    dec r07
+(+760) fb0           D3BE    jpeq fbe (+77c) LABEL227
+(+762) fb1           8944    load r10 <- #2
+(+764) fb2           4CF7    dec r07
+(+766) fb3           D3BE    jpeq fbe (+77c) LABEL227
+(+768) fb4           8948    load r10 <- #4
+(+76a) fb5           4CF7    dec r07
+(+76c) fb6           D3BE    jpeq fbe (+77c) LABEL227
+(+76e) fb7           8946    load r10 <- #3
+(+770) fb8           4CF7    dec r07
+(+772) fb9           D3BE    jpeq fbe (+77c) LABEL227
+(+774) fba           8942    load r10 <- #1
+(+776) fbb           4CF7    dec r07
+(+778) fbc           D3BE    jpeq fbe (+77c) LABEL227
+(+77a) fbd           CFA1    jump fa1 (+742) LABEL228
+(+77c) fbe LABEL227: CFDF    jump fdf (+7be) LABEL224
+(+77e) fbf LABEL026: 3C10    select primary reg bank 2
+(+780) fc0           8846    load r02 <- #3
+(+782) fc1           8862    load r03 <- #1
+(+784) fc2           8884    load r04 <- #2
+(+786) fc3           88A8    load r05 <- #4
+(+788) fc4 LABEL230: 8025    load r01 <- r05
+(+78a) fc5           80A2    load r05 <- r02
+(+78c) fc6           8041    load r02 <- r01
+(+78e) fc7           4CF7    dec r07
+(+790) fc8           D3DE    jpeq fde (+7bc) LABEL229
+(+792) fc9           8024    load r01 <- r04
+(+794) fca           8085    load r04 <- r05
+(+796) fcb           80A1    load r05 <- r01
+(+798) fcc           4CF7    dec r07
+(+79a) fcd           D3DE    jpeq fde (+7bc) LABEL229
+(+79c) fce           8022    load r01 <- r02
+(+79e) fcf           8043    load r02 <- r03
+(+7a0) fd0           8061    load r03 <- r01
+(+7a2) fd1           4CF7    dec r07
+(+7a4) fd2           D3DE    jpeq fde (+7bc) LABEL229
+(+7a6) fd3           8023    load r01 <- r03
+(+7a8) fd4           8064    load r03 <- r04
+(+7aa) fd5           8081    load r04 <- r01
+(+7ac) fd6           4CF7    dec r07
+(+7ae) fd7           D3DE    jpeq fde (+7bc) LABEL229
+(+7b0) fd8           8023    load r01 <- r03
+(+7b2) fd9           8065    load r03 <- r05
+(+7b4) fda           80A1    load r05 <- r01
+(+7b6) fdb           4CF7    dec r07
+(+7b8) fdc           D3DE    jpeq fde (+7bc) LABEL229
+(+7ba) fdd           CFC4    jump fc4 (+788) LABEL230
+(+7bc) fde LABEL229: CFDF    jump fdf (+7be) LABEL224
+(+7be) fdf LABEL224: B000    ret
+(+7c0) fe0 LABEL027: 3C10    select primary reg bank 2
+(+7c2) fe1           8BF4    load r31 <- #A
+(+7c4) fe2 LABEL232: 7C90    load (dispptr++) <- #20 ' '
+(+7c6) fe3           4FF7    dec r31
+(+7c8) fe4           D3E6    jpeq fe6 (+7cc) LABEL231
+(+7ca) fe5           CFE2    jump fe2 (+7c4) LABEL232
+(+7cc) fe6 LABEL231: 3C18    select primary reg bank 3
+(+7ce) fe7           B000    ret
+(+7d0) fe8           0000    add bin r00 += r00
+(+7d2) fe9           0000    add bin r00 += r00
+(+7d4) fea           0000    add bin r00 += r00
+(+7d6) feb           0000    add bin r00 += r00
+(+7d8) fec           0000    add bin r00 += r00
+(+7da) fed           0000    add bin r00 += r00
+(+7dc) fee           0000    add bin r00 += r00
+(+7de) fef           0000    add bin r00 += r00
+(+7e0) ff0           0000    add bin r00 += r00
+(+7e2) ff1           0000    add bin r00 += r00
+(+7e4) ff2           0000    add bin r00 += r00
+(+7e6) ff3           0000    add bin r00 += r00
+(+7e8) ff4           0000    add bin r00 += r00
+(+7ea) ff5           0000    add bin r00 += r00
+(+7ec) ff6           0000    add bin r00 += r00
+(+7ee) ff7           0000    add bin r00 += r00
+(+7f0) ff8           0000    add bin r00 += r00
+(+7f2) ff9           0000    add bin r00 += r00
+(+7f4) ffa           0000    add bin r00 += r00
+(+7f6) ffb           0000    add bin r00 += r00
+(+7f8) ffc           0000    add bin r00 += r00
+(+7fa) ffd           0000    add bin r00 += r00
+(+7fc) ffe           0000    add bin r00 += r00
+(+7fe) fff           0500    add bcd r08 += r00
+
+Undecoded instructions: 41
+(+01e) c0f LABEL003: 5728    0101.0111.0010.1000
+(+086) c43 LABEL004: 5728    0101.0111.0010.1000
+(+098) c4c           5C8F    0101.1100.1000.1111
+(+11c) c8e           B605    1011.0110.0000.0101
+(+124) c92           B62B    1011.0110.0010.1011
+(+17c) cbe           B487    1011.0100.1000.0111
+(+1c4) ce2 LABEL005: 5728    0101.0111.0010.1000
+(+260) d30           63B6    0110.0011.1011.0110
+(+26c) d36           63B6    0110.0011.1011.0110
+(+292) d49 LABEL080: 63B6    0110.0011.1011.0110
+(+2aa) d55           B5C6    1011.0101.1100.0110
+(+2fe) d7f           B5E3    1011.0101.1110.0011
+(+330) d98 LABEL104: 6095    0110.0000.1001.0101
+(+416) e0b           B580    1011.0101.1000.0000
+(+418) e0c LABEL126: 6053    0110.0000.0101.0011
+(+426) e13           6053    0110.0000.0101.0011
+(+432) e19           6053    0110.0000.0101.0011
+(+466) e33           B44F    1011.0100.0100.1111
+(+4e6) e73 LABEL129: B5C5    1011.0101.1100.0101
+(+4f2) e79           B421    1011.0100.0010.0001
+(+55e) eaf           B4A2    1011.0100.1010.0010
+(+5c2) ee1 LABEL197: B43B    1011.0100.0011.1011
+(+5d8) eec LABEL198: 5D0F    0101.1101.0000.1111
+(+5de) eef           B439    1011.0100.0011.1001
+(+602) f01           5C8F    0101.1100.1000.1111
+(+60e) f07 LABEL203: 5C4F    0101.1100.0100.1111
+(+636) f1b           5C8F    0101.1100.1000.1111
+(+64c) f26           5C8F    0101.1100.1000.1111
+(+6cc) f66           B792    1011.0111.1001.0010
+(+6d8) f6c           B78E    1011.0111.1000.1110
+(+6e4) f72           B786    1011.0111.1000.0110
+(+6ee) f77           B783    1011.0111.1000.0011
+(+726) f93 LABEL225: B60B    1011.0110.0000.1011
+(+728) f94           B62A    1011.0110.0010.1010
+(+72a) f95           B649    1011.0110.0100.1001
+(+72c) f96           B668    1011.0110.0110.1000
+(+72e) f97           B687    1011.0110.1000.0111
+(+730) f98           B706    1011.0111.0000.0110
+(+732) f99           B725    1011.0111.0010.0101
+(+734) f9a           B744    1011.0111.0100.0100
+(+736) f9b           B763    1011.0111.0110.0011
