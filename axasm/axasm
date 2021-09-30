@@ -85,5 +85,7 @@ awk -f $LIB/soloinc.awk $1 | awk -f $LIB/solopre.awk -v PROC=$PROC -v LFILE=$LFI
 if gcc -I$LIB -x c -std=c99 $DEFOP -o $XFILE $LIB/soloasm.c $CFILE 
 then
  $XFILE $POSTOP
+else
+ exit 1
 fi
 #echo $CFILE  # debug

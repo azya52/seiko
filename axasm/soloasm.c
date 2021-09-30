@@ -87,6 +87,7 @@ int main(int argc, char *argv[])
       return 1;
     }
   siz=_solo_info.psize;
+  int res = 1;
   switch (mode)
     {
     case 1:
@@ -155,15 +156,16 @@ int main(int argc, char *argv[])
 		break;
       
     default:  // binary for 16 bit targets only (arch dependent)
-		fprintf(stdout,"Translate OK!\nResult file size %dB",(_solo_info.end+1)*_solo_info.psize/8);
-		fprintf(outfile,"");
+		fprintf(stdout,"Translate OK!\nResult file size %dB\n",(_solo_info.end+1)*_solo_info.psize/8);
+		//fprintf(outfile,"");
 		for (int i=_solo_info.begin;i<=_solo_info.end;i++) {
 			fputc((_solo_info.ary[i]>>8),outfile);
 			fputc(_solo_info.ary[i],outfile);
 		}		
+		res = 0;
     }
   
   if (outfile!=stdout) fclose(outfile);
-  return 0;
+  return res;
 }
 

@@ -24,6 +24,7 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <soloasm.h>
+#include <stdarg.h>
 
 // We assume the first ORG is the lowest address
 #define ORG(n) unsigned int genasm(int _solo_pass) { \
@@ -41,8 +42,23 @@
 
 #define DEFLABEL(l) static unsigned l
 #define LABEL(l) if(dbi==1) DATA(0); l=_solo_add+0xC00; 
-#define DW(n) _solo_info.ary[_solo_add++]=(n)
+#define DW(n) if(dbi==1) DATA(0); _solo_info.ary[_solo_add++]=(n)
 
+#define DATA(...) {\
+	unsigned ns[] = {__VA_ARGS__};\
+	int n_size = sizeof(ns)/sizeof(unsigned);\
+	for (int i = 0; i < n_size; i++) {\
+		if(dbi==1) {\
+			_solo_info.ary[_solo_add++]|=(ns[i] & 0xFF);\
+			dbi=0;\
+		} else {\
+			_solo_info.ary[_solo_add]=(ns[i] & 0xFF)<<8;\
+			dbi=1;\
+		}\
+	}\
+}\
+
+/*
 #define DATA(n) if(dbi==1) {\
 		_solo_info.ary[_solo_add++]|=(n & 0xFF);\
 		dbi=0;\
@@ -50,8 +66,9 @@
 		_solo_info.ary[_solo_add]=(n & 0xFF)<<8;\
 		dbi=1;\
 	}\
-	
-#define DB(n) DATA(n)
+	*/
+#define DB(n,...) DATA(n, __VA_ARGS__)
+//#define DB(n) DATA(n)
 
 #define CHKSIZE(n,bits) if (n>>bits) fprintf(stderr,"Warning: value %04X out of range at %04d\n",n,_solo_add)
 #define UC0(op) _solo_info.ary[_solo_add++]=op
@@ -95,15 +112,18 @@
 #define LSHM(r,i) UC2_523(0x5000,r,1,i)
 #define IN(d,s) UC2(0x5400,d,s)
 
-#define PSAM(R,r) UC2_523(0x6000,R,0,r);
-#define PLAM(R,r) UC2_523(0x6000,R,2,r);
-#define LDSM(R,r) UC2_523(0x6400,R,1,r);
-#define STSM(R,r) UC2_523(0x6400,R,0,r);
+#define PSAM(R,r) UC2_523(0x6000,R,0,r)
+#define PLAM(R,r) UC2_523(0x6000,R,2,r)
+#define LDSM(R,r) UC2_523(0x6400,R,1,r)
+#define STSM(R,r) UC2_523(0x6400,R,0,r)
 #define STLM(R,r) UC2_523(0x6800,R,0,r)
 #define STL(R) UC1_55(0x6C00,R)
-#define PSAI(l) UCJ11(0x7000,l);
+#define PSAI(l) UCJ11(0x7000,l)
 #define PLAI(i) UC1_8(0x7800,i)
+#define STLS(i) UC0(0x7C00)
+#define STLSA(a) UC1_8(0x7C08,a)
 #define STLI(i) UC1_8(0x7C10,i)
+#define STLIA(i) UC1_8(0x7C18,i)
 
 #define MOV(d,s) UC2(0x8000,d,s) 
 #define MOVM(d,s) UC2(0x8400,d,s) 
@@ -181,7 +201,7 @@
 #define IO14 14
 #define IO15 15
 
-#define OS_CLRCB 0x8F2	//zero registers of the current bank
+#define OS_CLRCB 0x8F2	//clear registers of the current bank
 #define OS_PRINTLINE10 0x9CB //print "----------" (OS_PRINTLINE0-5 + OS_PRINTLINE0-5) (part of CALCULATOR)
 #define OS_PRINTWATCH 0xA1F //draw watch screen with values from current bank
 #define OS_PRINTDAYOFWEEK 0xA33	//Current day of week + 0:0000 (part of WATCH)
