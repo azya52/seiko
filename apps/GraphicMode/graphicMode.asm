@@ -36,7 +36,7 @@ draw1:
 	stli 0x01 			; 
 	
 	lcrb B3
-	ldi RB6, 0xF  		;31 lines including spaces between characters
+	ldi RB6, 0xF		;31 lines including spaces between characters
 	ldi RB7, 0x1		;first there are 16 lines for the top half (top to bottom),
 						;then 16 lines for the bottom half (bottom to top)
 drawLoop:
@@ -51,7 +51,7 @@ drawLoop:
 	stlsa 0 			; 
 	stlsa 0 			; 
 	plai 0 				;add any 6 chars for 
-	stlm RA0, 6 		;correct offset (not visible)
+	stlm RA0, 6			;correct offset (not visible)
 
 	dec RB6, 7
 	jnz drawLoop 			
@@ -61,10 +61,10 @@ drawLoop:
 
 checkBtnLoop:
 	in RB6, IO8
-	cpi RB6, 2 			;if right button pressed
-	jz draw 			;redraw
-	cpi RB6, 8 			;if mode button pressed
-	jz modeBtnPressed 	;exit
+	cpi RB6, 2			;if right button pressed
+	jz draw				;redraw
+	cpi RB6, 8			;if mode button pressed
+	jz modeBtnPressed	;exit
 	jmp checkBtnLoop
 modeBtnPressed:
 
