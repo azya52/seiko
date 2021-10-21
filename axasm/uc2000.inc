@@ -27,62 +27,83 @@
 #include <stdarg.h>
 
 // We assume the first ORG is the lowest address
-#define ORG(n) unsigned int genasm(int _solo_pass) { \
-   unsigned preDATAadr=0;\
+#define START unsigned int genasm(int _solo_pass) { \
    unsigned tmp=0;\
-   unsigned dbi=0;\
-   unsigned _solo_add=n;\
+   unsigned cur_line=0;\
+   unsigned _start_add=0x1800;\
+   unsigned _solo_add=0;\
    _solo_info.psize=16; \
-   _solo_info.begin=n; \
+   _solo_info.begin=0; \
    _solo_info.memsize=4096; \
-   _solo_info.ary=malloc(_solo_info.memsize)
+   _solo_info.ary=malloc(_solo_info.memsize);\
+	unsigned int getPCfromLabel(unsigned int lbl) {\
+		return ((lbl + _start_add)/2);\
+	}\
+	unsigned int getPCfromInt(unsigned short pc) {\
+		return pc;\
+	}
+#define END _solo_info.end=_solo_add/2-1; return _solo_add/2; }
 
-#define REORG(n) _solo_add=n;
-#define END _solo_info.end=_solo_add-1; return _solo_add; }
+#define DEFLABEL(l) static unsigned int l;
+#define LABEL(l) l = _solo_add;
+#define LINE(line) cur_line = line;
+#define DW(n) ADDOPCODE(n);
+#define DB(n,...) DATA(n, __VA_ARGS__)
+#define $ _solo_add
 
-#define DEFLABEL(l) static unsigned l
-#define LABEL(l) if(dbi==1) DATA(0); l=_solo_add+0xC00; 
-#define DW(n) if(dbi==1) DATA(0); _solo_info.ary[_solo_add++]=(n)
+#define ORG(n) {\
+	if(_solo_add == 0)\
+		_start_add=n;\
+	else\
+		if ((n - _start_add) < _solo_add) {\
+			fprintf(stderr,"Line %d: An attempt was made to move the location counter backwards with the ORG directive\n", cur_line);\
+		}\
+		_solo_add = (n-_start_add);\
+	}
 
 #define DATA(...) {\
 	unsigned ns[] = {__VA_ARGS__};\
 	int n_size = sizeof(ns)/sizeof(unsigned);\
 	for (int i = 0; i < n_size; i++) {\
-		if(dbi==1) {\
-			_solo_info.ary[_solo_add++]|=(ns[i] & 0xFF);\
-			dbi=0;\
+		CHKSIZE(ns[i],8)\
+		if(_solo_add % 2 == 0) {\
+			_solo_info.ary[_solo_add++/2]=(ns[i] & 0xFF)<<8;\
 		} else {\
-			_solo_info.ary[_solo_add]=(ns[i] & 0xFF)<<8;\
-			dbi=1;\
+			_solo_info.ary[_solo_add++/2]|=(ns[i] & 0xFF);\
 		}\
 	}\
 }\
 
-/*
-#define DATA(n) if(dbi==1) {\
-		_solo_info.ary[_solo_add++]|=(n & 0xFF);\
-		dbi=0;\
-	} else {\
-		_solo_info.ary[_solo_add]=(n & 0xFF)<<8;\
-		dbi=1;\
-	}\
-	*/
-#define DB(n,...) DATA(n, __VA_ARGS__)
-//#define DB(n) DATA(n)
+#define GETPC(X)\
+	_Generic((X),\
+	unsigned short: getPCfromInt,\
+	unsigned int: getPCfromLabel,\
+	default: getPCfromInt\
+)(X)
 
-#define CHKSIZE(n,bits) if (n>>bits) fprintf(stderr,"Warning: value %04X out of range at %04d\n",n,_solo_add)
-#define UC0(op) _solo_info.ary[_solo_add++]=op
-#define UC1_23(op,r1) CHKSIZE(r1,2); _solo_info.ary[_solo_add++]=(op|(r1<<3))
-#define UC1_55(op,r1) CHKSIZE(r1,5); _solo_info.ary[_solo_add++]=(op|(r1<<5))
-#define UC1_8(op,r) CHKSIZE(r,8); _solo_info.ary[_solo_add++]=(op|((r&0xF0)<<2)|((r&0x08)<<2)|(r&0x07))
-#define UC2(op,r1,r2) CHKSIZE(r1,5); CHKSIZE(r2,5); _solo_info.ary[_solo_add++]=(op|(r1<<5)|r2)
-#define UC2_541(op,r1,r2) CHKSIZE(r1,5); CHKSIZE(r2,4); _solo_info.ary[_solo_add++]=op|(r1<<5)|(r2<<1)
-#define UCJ(op,l) _solo_info.ary[_solo_add++]=((op)|(l))
-#define UCJ11(op,l) tmp=(l & 0x3FF)*2; CHKSIZE(tmp,11); UCJ(op,tmp)
-#define UCJ12(op,l) CHKSIZE(l,12); UCJ(op,l)
-#define UCJ10(op,l) tmp=l & 0x3FF; CHKSIZE(tmp,10); UCJ(op,tmp)
-#define UCJ3(op,R,I,a) tmp=a; if(a>31) tmp=(a & 0x3FF)-_solo_add-1; CHKSIZE(I,2); CHKSIZE(R,5); CHKSIZE(tmp,5); _solo_info.ary[_solo_add++]=(op|(I<<10)|(R<<5)|(tmp))
-#define UC2_523(op,R,I,i) CHKSIZE(R,5); CHKSIZE(I,2); CHKSIZE(i,3); _solo_info.ary[_solo_add++]=(op|(R<<5)|(I<<3)|i)
+#define CHKSIZE(n,bits)\
+	if (n>>bits) {\
+		fprintf(stderr,"Line %d: Value %d out of range\n", cur_line, n);\
+		_solo_info.err = 1;\
+	}\
+	
+#define ADDOPCODE(opcode) _solo_info.ary[_solo_add/2]=opcode; _solo_add = (_solo_add + 2)
+
+	
+#define CHKEVEN() if(_solo_add%2 != 0) DATA(0)
+
+#define UC0(op) CHKEVEN(); ADDOPCODE(op)
+#define UC1_23(op,r1) CHKEVEN(); CHKSIZE(r1,2); ADDOPCODE(op|(r1<<3))
+#define UC1_55(op,r1) CHKEVEN(); CHKSIZE(r1,5); ADDOPCODE(op|(r1<<5))
+#define UC1_8(op,r) CHKEVEN(); CHKSIZE(r,8); ADDOPCODE(op|((r&0xF0)<<2)|((r&0x08)<<2)|(r&0x07))
+#define UC2(op,r1,r2) CHKEVEN(); CHKSIZE(r1,5); CHKSIZE(r2,5); ADDOPCODE(op|(r1<<5)|r2)
+#define UC2_425(op,r1,r2) CHKEVEN(); CHKSIZE(r1,4); CHKSIZE(r2,5); ADDOPCODE(op|(r1<<6)|r2)
+#define UC2_541(op,r1,r2) CHKEVEN(); CHKSIZE(r1,5); CHKSIZE(r2,4); ADDOPCODE(op|(r1<<5)|(r2<<1))
+#define UCJ11(op,l) CHKEVEN(); tmp=((l % 2048) & 0x7FF); CHKSIZE(tmp,11); ADDOPCODE((op)|(tmp))
+#define UCJ12(op,l) CHKEVEN(); CHKSIZE(l,12); ADDOPCODE((op)|(l))
+#define UCJ10(op,l) CHKEVEN(); tmp=l & 0x3FF; CHKSIZE(tmp,10); ADDOPCODE((op)|(tmp))
+#define UCJ3(op,R,I,a) CHKEVEN(); tmp=a; if(a>31) tmp=(a-_solo_add)/2-1; CHKSIZE(I,2); CHKSIZE(R,5); CHKSIZE(tmp,5); ADDOPCODE(op|(I<<10)|(R<<5)|(tmp))
+#define UC2_523(op,R,I,i) CHKEVEN(); CHKSIZE(R,5); CHKSIZE(I,2); CHKSIZE(i,3); ADDOPCODE(op|(R<<5)|(I<<3)|i)
 
 #define ADD(d,s) UC2(0x0000,d,s) 
 #define ADB(d,s) UC2(0x0400,d,s) 
@@ -111,7 +132,8 @@
 #define RSHM(r,i) UC2_523(0x5000,r,0,i)
 #define LSHM(r,i) UC2_523(0x5000,r,1,i)
 #define IN(d,s) UC2(0x5400,d,s)
-
+#define OUT(d,s) UC2(0x5800,s,d)
+#define OUTI(d,i) UC2_425(0x5C00,i,d)
 #define PSAM(R,r) UC2_523(0x6000,R,0,r)
 #define PLAM(R,r) UC2_523(0x6000,R,2,r)
 #define LDSM(R,r) UC2_523(0x6400,R,1,r)
@@ -120,7 +142,7 @@
 #define STL(R) UC1_55(0x6C00,R)
 #define PSAI(l) UCJ11(0x7000,l)
 #define PLAI(i) UC1_8(0x7800,i)
-#define STLS(i) UC0(0x7C00)
+#define STLS UC0(0x7C00)
 #define STLSA(a) UC1_8(0x7C08,a)
 #define STLI(i) UC1_8(0x7C10,i)
 #define STLIA(i) UC1_8(0x7C18,i)
@@ -133,18 +155,18 @@
 #define MVACM(d,s) UC2(0x9400,d,s)
 #define MVCA(d,s) UC2(0x9800,d,s)
 #define MVCAM(d,s) UC2(0x9C00,d,s)
-#define CALL(l) UCJ12(0xA000,l)
+#define CALL(l) UCJ12(0xA000,GETPC(l))
 #define RET UC0(0xB000) 
-#define CPFJR(R,a) UCJ3(0xB400,R,0,a)
+#define CPFJR(R,l) UCJ3(0xB400,R,0,l)
 #define IJMR(R) UC1_55(0xB800,R)
-#define NOP UC0(0xBC00)
-#define JMP(l) UCJ12(0xC000,l)
-#define JZ(l) UCJ10(0xD000,l)
-#define JNZ(l) UCJ10(0xD400,l)
-#define JC(l) UCJ10(0xD800,l)
-#define JNC(l) UCJ10(0xDC00,l)
-#define BTJR(R,I,a) UCJ3(0xE000,R,I,a)
-#define CPJR(R,I,a) UCJ3(0xF000,R,I,a)
+#define WFI UC0(0xBC00)
+#define JMP(l) UCJ12(0xC000,GETPC(l))
+#define JZ(l) UCJ10(0xD000,GETPC(l))
+#define JNZ(l) UCJ10(0xD400,GETPC(l))
+#define JC(l) UCJ10(0xD800,GETPC(l))
+#define JNC(l) UCJ10(0xDC00,GETPC(l))
+#define BTJR(R,I,l) UCJ3(0xE000,R,I,l)
+#define CPJR(R,I,l) UCJ3(0xF000,R,I,l)
 
 #define B0 0	//register page
 #define B1 1
@@ -184,25 +206,27 @@
 #define RD6 30
 #define RD7 31
 
-#define IO0 0
-#define IO1 1
-#define IO2 2
-#define IO3 3
-#define IO4 4
-#define IO5 5
-#define IO6 6
-#define IO7 7
-#define IO8 8
-#define IO9 9
-#define IO10 10
-#define IO11 11
-#define IO12 12
-#define IO13 13
-#define IO14 14
-#define IO15 15
+#define SR0 0
+#define SR1 1
+#define SR2 2
+#define SR3 3
+#define SR4 4
+#define SR5 5
+#define SR6 6
+#define SR7 7
+#define SR8 8
+#define SR9 9
+#define SR10 10
+#define SR11 11
+#define SR12 12
+#define SR13 13
+#define SR14 14
+#define SR15 15
 
 #define OS_CLRCB 0x8F2	//clear registers of the current bank
 #define OS_PRINTLINE10 0x9CB //print "----------" (OS_PRINTLINE0-5 + OS_PRINTLINE0-5) (part of CALCULATOR)
+#define OS_PRINTSTARLINE5 0x9C1 //print "*****"
+#define OS_PRINTSTARLINE10 0x9C0 //print "**********"
 #define OS_PRINTWATCH 0xA1F //draw watch screen with values from current bank
 #define OS_PRINTDAYOFWEEK 0xA33	//Current day of week + 0:0000 (part of WATCH)
 #define OS_PRINTALARMSCR 0xAFB //print alarm screen (part of ALARM)

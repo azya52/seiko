@@ -33,21 +33,25 @@
 # Granted STRING and STRINGPACK ought to be removable somehow
 
 BEGIN {
-  if (LFILE!="") {
-    if (PROC=="") {
-      print "#include <soloasm.inc>";  # default inc file
-    } else {
-      print "#include <" PROC ".inc>";
+    if (LFILE!="") {
+        if (PROC=="") {
+            print "#include <soloasm.inc>";  # default inc file
+        } else {
+            print "#include <" PROC ".inc>";
+        }
+        print "#include \"lfile\""
+        print "" > LFILE
     }
-    print "#include \"lfile\""
-    print "" > LFILE
-    }
-  }
+}
+
+END {
+    print "END;"
+}
 
 
 # one time init
 {
-  if (first != 1) { first=1;   print "#line 1 \"" FILENAME "\""; }
+    if (first != 1) { first=1;   print "#line 1 \"" FILENAME "\""; }
 }
 
 
@@ -59,144 +63,97 @@ BEGIN {
 /^[ \t]*##/  {sub("^[ \t]*##","#");  print; next; }
 /^[ \t]*#/  { sub("^[ \t]*#",""); print; next; }
 
-   {
+
+{
 # This won't disturb semicolons if there is a quote
 # directly after it. This could lead to trouble with
 # semicolons in quoted strings, for example
 # so we save just in case and string handling gets all of it
 
-     withsemi=$0
-     sub(";[^'\"].*$","");  # remove asm comments
-     op=1;
-   }
-
-
-
-
+    withsemi=$0
+    sub(";.*$","");  # remove asm comments
+    op=1;
+}
 
 # deal with labels
-/^[ \t]*[^ \t,]+:/   { 
-     label=$1;
-     sub(/:$/,"",label);
-     print "DEFLABEL("  label  ");" >>LFILE;
-     printf "LABEL("  label  "); ";
-     $1="";
-     op=2;
-   }
+/^[ \t]*[^ \t,]+:/ { 
+    label=$1;
+    sub(/:$/,"",label);
+    print "DEFLABEL("  label  ");" >>LFILE;
+    printf "LABEL("  label  "); ";
+    $1="";
+    op=2;
+}
 
 # blank lines (maybe it used to have just a label)
 /^[ \t]*$/ { print; next; } 
-   {
 
-# note: the below means your .h file that defines the processor
-# must use uppercase names in macros but you are free to
-# use mixed case in the assembly
-# probably should make this an option somehow
-     mac=toupper($op);
-     $op="";
-# unpacked string
-     if (mac=="DS") {
-	 $op="";
-	 strng=withsemi 
-	 first=0;
-# scan each letter. Note first quote, copy until 2nd quote
-	 for (i=1;i<length(strng);i++) {
-	     if (substr(strng,i,1)=="\"") {
-		 if (first==0) { first=1;  continue; }
-		 break;
-	     }
-	     if (!first) continue;
-	     v=substr(strng,i,1);     
-#	     if (v=="\\") { v=substr(strng,i,2); i++; }
-# handle \xNN \DDD or \C
-	     if (v=="\\") {
-		 v1=substr(strng,i+1,1);
-		 if (v1=="x"||v1=="X") {
-		     v="\\x"
-		     i+=2;
-		     v=v substr(strng,i,1)
-		     v1=substr(strng,i+1,1)
-		     if ((v1>="0"&&v1<="9")||(tolower(v1)>="a"&&tolower(v1)<="f")) {
-			     v=v v1
-			     i++
-		     }
-		 }
-		 else if (v1>="0" && v1<="7") { 
+{
 
-		     while (v1>="0" && v1<="7") {
-			 v=v v1;
-			 i++;
-			 v1=substr(strng,i+1,1);
-		     }
-		 } else {
-		     v=substr(strng,i,2); 
-		     i++;
-		 }
-		 
-		 
-	     }
-	     print "DATA('" v "');"
+    {
+        if (start != 1) {
+            start = 1;
+            print "START;"
+        }
+    }
 
-	 }
-	 next;
-     }
-# packed string. Same logic as STRING
-     if (mac=="STRINGPACK") {
-	 $op="";
-	 strng=withsemi #  $0;
-	 first=0;
-	 last=0;
-	 for (i=1;i<length(strng);) {
-	     if (substr(strng,i,1)=="\"") {
-		 i++;
-		 if (first==0) { first=1;  continue; }
-		 break;
-	     }
-	     if (!first) { i++; continue; }
-	     printf "\tDATA4("
-	     k=0;
-	     for (j=0;j<4;j++) {
-# should look at \x type escapes
-		 v=substr(strng,i+k++,1);
-# handle \xNN \DDD or \C
-	     if (v=="\\") {
-		 v1=substr(strng,i+k+1,1);
-		 if (v1=="x"||v1=="X") {
-		     v="\\x"
-		     k+=2;
-		     v=v substr(strng,k,1)
-		     v1=substr(strng,k+1,1)
-		     if ((v1>="0"&&v1<="9")||(tolower(v1)>="a"&&tolower(v1)<="f")) {
-			     v=v v1
-			     k++
-			 }
-		 }
-		 else if (v1>="0" && v1<="7") {
-		     while (v1>="0" && v1<="7") {
-			 v=v v1;
-			 k++;
-			 v1=substr(strng,k+1,1);
-		     }
-		 } else {
-		     v=substr(strng,k,2); 
-		     k++;
-		 }
-	     }
+    print("LINE("  NR-1  ");");
 
-#		 if (v=="\\") { v=substr(strng,i+j,2); j++; }
-		 if (v=="\"") last=1;
-		 if (last) v="\\000";
-		 printf("'" v "'")
-		 if (j!=3) printf(",");
-	     }
-	     print ");"
-	     i+=k;
-	 }
-	 next;
-     }
-# just some generic monadic macro or one with arguments
-     if ($(op+1)=="") print(mac ";"); else print(mac  "("  $0  ");");
-   }
+    # note: the below means your .h file that defines the processor
+    # must use uppercase names in macros but you are free to
+    # use mixed case in the assembly
+    # probably should make this an option somehow
+    mac=toupper($op);
+    $op="";
+    # unpacked string
+    if (mac=="DS") {
+        $op="";
+        strng=withsemi;
+        qopen=0;
 
-
-     
+        # scan each letter. Note first quote, copy until 2nd quote
+        for (i=1;i<length(strng);i++) {
+            v=substr(strng,i,1); 
+            if (v == "\"" && substr(strng,i-1,1) != "\\") {
+                qopen = !qopen;
+                continue;
+            }
+            if (!qopen) {
+                if (v == ";") {
+                    break;
+                } else {
+                    continue;
+                }
+            }           
+            # if (v=="\\") { v=substr(strng,i,2); i++; }
+            # handle \xNN \DDD or \C
+            if (v=="\\") {
+                v1=substr(strng,i+1,1);
+                if (v1=="x"||v1=="X") {
+                    v="\\x"
+                    i+=2;
+                    v=v substr(strng,i,1)
+                    v1=substr(strng,i+1,1)
+                    if ((v1>="0"&&v1<="9")||(tolower(v1)>="a"&&tolower(v1)<="f")) {
+                        v=v v1
+                        i++
+                    }
+                }
+                else if (v1>="0" && v1<="7") { 
+                    while (v1>="0" && v1<="7") {
+                        v=v v1;
+                        i++;
+                        v1=substr(strng,i+1,1);
+                    }
+                } else {
+                    v=substr(strng,i,2); 
+                    i++;
+                }
+            }
+            print "DATA('" v "');"
+        }
+        next;
+    }
+    # just some generic monadic macro or one with arguments
+    if ($(op+1)=="") print(mac ";"); else print(mac  "("  $0  ");");
+}
