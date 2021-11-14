@@ -1,29 +1,27 @@
-#pragma once
-
-#define INSTR_COUNT 55
+#define INSTR_COUNT 61
 #define INSTR_SIZE 16
 #define ARG_MAX_COUNT 3
 
-enum arg_type {AT_NONE, AT_REG, AT_IOREG, AT_ADR12, AT_ADR11, AT_ADR10, AT_ADR5, AT_IMD};
+enum arg_type {AT_NONE, AT_REG, AT_IOREG, AT_ADR12, AT_ADR11, AT_ADR10, AT_ADR5, AT_IMD, AT_CHR};
 
-char* general_reg[32] = {
+const char* general_reg[32] = {
 	"RA0","RA1","RA2","RA3","RA4","RA5","RA6","RA7",
 	"RB0","RB1","RB2","RB3","RB4","RB5","RB6","RB7",
 	"RC0","RC1","RC2","RC3","RC4","RC5","RC6","RC7",
 	"RD0","RD1","RD2","RD3","RD4","RD5","RD6","RD7"
 };
 
-char* io_reg[16] = {
-	"IO0","IO1","IO2","IO3","IO4","IO5","IO6","IO7",
-	"IO8","IO9","IO10","IO11","IO12","IO13","IO14","IO15"
+const char* io_reg[16] = {
+	"SR0","SR1","SR2","SR3","SR4","SR5","SR6","SR7",
+	"SR8","SR9","SR10","SR11","SR12","SR13","SR14","SR15"
 };
 
-char* bank[4] = {
+const char* bank[4] = {
 	"B0","B1","B2","B3"
 };
 
 typedef struct {
-	char* name;
+	const char* name;
 	int opcode;
 	int opmask;
 	int desc[INSTR_SIZE];
@@ -59,6 +57,8 @@ static const instruction_s instr_set[INSTR_COUNT]{
 	{ "RSHM", 0x5000, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,2,2,2 },{ AT_REG, AT_IMD, AT_NONE } },
 	{ "LSHM", 0x5008, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,2,2,2 },{ AT_REG, AT_IMD, AT_NONE } },
 	{ "IN",   0x5400, 0xFC10,{ 0,0,0,0,0,0,1,1,1,1,1,0,2,2,2,2 },{ AT_REG, AT_IOREG, AT_NONE } },
+	{ "OUT",  0x5800, 0xFC10,{ 0,0,0,0,0,0,2,2,2,2,2,0,1,1,1,1 },{ AT_IOREG, AT_REG, AT_NONE } },
+	{ "OUTI", 0x5C00, 0xFC30,{ 0,0,0,0,0,0,2,2,2,2,0,0,1,1,1,1 },{ AT_IOREG, AT_IMD, AT_NONE } },
 	{ "PSAM", 0x6000, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,2,2,2 },{ AT_REG, AT_IMD, AT_NONE } },
 	{ "PLAM", 0x6010, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,2,2,2 },{ AT_REG, AT_IMD, AT_NONE } },
 	{ "LDSM", 0x6408, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,2,2,2 },{ AT_REG, AT_IMD, AT_NONE } },
@@ -67,11 +67,14 @@ static const instruction_s instr_set[INSTR_COUNT]{
 	{ "STL",  0x6C00, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0 },{ AT_REG, AT_NONE, AT_NONE } },
 	{ "PSAI", 0x7000, 0xF800,{ 0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1 },{ AT_ADR11, AT_NONE, AT_NONE } },
 	{ "PLAI", 0x7800, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,1 },{ AT_IMD, AT_NONE, AT_NONE } },
-	{ "STLI", 0x7C10, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,1 },{ AT_IMD, AT_NONE, AT_NONE } },
+	{ "STLS", 0x7C00, 0xFC18,{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },{ AT_NONE, AT_NONE, AT_NONE } },
+	{ "STLSA",0x7C08, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,1 },{ AT_IMD, AT_NONE, AT_NONE } },
+	{ "STLI", 0x7C10, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,1 },{ AT_CHR, AT_NONE, AT_NONE } },
+	{ "STLIA",0x7C18, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,1 },{ AT_IMD, AT_NONE, AT_NONE } },
 	{ "MOV",  0x8000, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2 },{ AT_REG, AT_REG, AT_NONE } },
 	{ "MOVM", 0x8400, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2 },{ AT_REG, AT_REG, AT_NONE } },
 	{ "LDI",  0x8800, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,0 },{ AT_REG, AT_IMD, AT_NONE } },
-	{ "CLRM", 0x8C00, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,2,2,2 },{ AT_REG, AT_REG, AT_NONE } },
+	{ "CLRM", 0x8C00, 0xFC18,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,2,2,2 },{ AT_REG, AT_IMD, AT_NONE } },
 	{ "MVAC", 0x9000, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2 },{ AT_REG, AT_REG, AT_NONE } },
 	{ "MVACM",0x9400, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2 },{ AT_REG, AT_REG, AT_NONE } },
 	{ "MVCA", 0x9800, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2 },{ AT_REG, AT_REG, AT_NONE } },
@@ -80,6 +83,7 @@ static const instruction_s instr_set[INSTR_COUNT]{
 	{ "RET",  0xB000, 0xFFFF,{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },{ AT_NONE, AT_NONE, AT_NONE } },
 	{ "CPFJR",0xB400, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2 },{ AT_REG, AT_ADR5, AT_NONE } },
 	{ "IJMR", 0xB800, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0 },{ AT_REG, AT_NONE, AT_NONE } },
+	{ "WFI",  0xBC00, 0xFFFF,{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },{ AT_NONE, AT_NONE, AT_NONE } },
 	{ "JMP",  0xC000, 0xF000,{ 0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1 },{ AT_ADR12, AT_NONE, AT_NONE } },
 	{ "JZ",   0xD000, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1 },{ AT_ADR10, AT_NONE, AT_NONE } },
 	{ "JNZ",  0xD400, 0xFC00,{ 0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1 },{ AT_ADR10, AT_NONE, AT_NONE } },

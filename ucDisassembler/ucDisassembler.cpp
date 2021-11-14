@@ -17,52 +17,75 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "instructions.h"
-
-using namespace std;
 
 int main(int argc, char *argv[]) {
 	FILE *source;
 	FILE *outfile;
 	
-	if (argv[1]==NULL || (source = fopen(argv[1], "rb")) == NULL) {
-		printf("Could not open source file: %s\n", argv[1]);
+	int offset = 0x1800;
+	
+	if (argc <= 1) {
+		printf("Usage: \n\t ucDisassembler [-a <start address>] <input file name> <output file name>\n");
 		return 0;
 	}
 
+	char *opts = (char *)"a:";
+	int opt;
+	while ((opt = getopt(argc, argv, opts)) != -1) {
+		switch (opt) {
+			case 'a': 
+				offset = atoi(optarg);
+				break;
+		}
+	}
+	
+	if (argv[optind]==NULL || (source = fopen(argv[optind], "rb")) == NULL) {
+		printf("Could not open source file: %s\n", argv[optind]);
+		return 0;
+	}
+	
 	char* foutname;
-	if (argv[2] == NULL) {
-		foutname = new char[strlen(argv[1]) + 4 + 1];
-		strcpy(foutname, argv[1]);
+	if (argv[optind+1] == NULL) {
+		foutname = new char[strlen(argv[optind]) + 4 + 1];
+		strcpy(foutname, argv[optind]);
 		strcat(foutname, ".asm");
 	}
 	else {
-		foutname = new char[strlen(argv[2])+1];
-		strcpy(foutname, argv[2]);
+		foutname = new char[strlen(argv[optind+1])+1];
+		strcpy(foutname, argv[optind+1]);
 	}
-
+	
 	if ((outfile = fopen(foutname, "w")) == NULL) {
 		printf("Could not create file: %s\n", argv[2]);
 		return 0;
 	}
-
+	
 	unsigned char word[2];
-	int offset = 0;
-	fprintf(outfile, "          ORG 0\n", offset);
+	fprintf(outfile, "          ORG %04x\n", offset);
+	int pc = offset / 2;
+	
+	fseek(source, 0 , SEEK_END);
+	long source_size = ftell(source);
+	fseek(source, 0 , SEEK_SET);// needed for next read from beginning of file
+	
+	int first_pc = offset / 2;
+	int last_pc = source_size / 2 + pc;
+	
 	while (fread(word, 2, 1, source) != 0) {
 		int instruction = ((word[0] & 0xFF )<<8) | word[1];
-		fprintf(outfile, "L%04d:    ", offset);
+		fprintf(outfile, "L%04d:    ", pc);
 		int i;
 		for (i = 0; i < INSTR_COUNT; i++) {
 			if ((instruction & instr_set[i].opmask) == instr_set[i].opcode) {
 				fprintf(outfile, "%s", instr_set[i].name);
-				int args[ARG_MAX_COUNT] = {0,0};
+				int args[ARG_MAX_COUNT] = {0,};
 				for (int j = 0; j < INSTR_SIZE; j++) {
-					if (instr_set[i].desc[j] > 0) {
+					if (instr_set[i].desc[j] != AT_NONE) {
 						args[instr_set[i].desc[j]-1] <<= 1;
 						args[instr_set[i].desc[j]-1] |= (instruction >> (INSTR_SIZE-j-1)) & 0x0001;
 					}
@@ -73,8 +96,8 @@ int main(int argc, char *argv[]) {
 						fprintf(outfile, ",");
 					}
 					if (instr_set[i].arg_type[arg_n] == AT_ADR12) {
-						if (args[arg_n] > 3072) {
-							fprintf(outfile, " L%04d", args[arg_n]-3072);
+						if ((args[arg_n] >= first_pc) && (args[arg_n] < last_pc)) {
+							fprintf(outfile, " L%04d", args[arg_n] - first_pc);
 						} else {
 							fprintf(outfile, " 0x%04x", args[arg_n]);
 						}
@@ -87,14 +110,18 @@ int main(int argc, char *argv[]) {
 						fprintf(outfile, " L%04d", args[arg_n]);
 					} else
 					if (instr_set[i].arg_type[arg_n] == AT_ADR5) {
-						fprintf(outfile, " +%d", args[arg_n]);
+						fprintf(outfile, " L%04d", pc + args[arg_n] + 1);
 					} else
 					if (instr_set[i].arg_type[arg_n] == AT_REG) {
 						fprintf(outfile, " %s", general_reg[args[arg_n]]);
 					} else
 					if (instr_set[i].arg_type[arg_n] == AT_IOREG) {
 						fprintf(outfile, " %s", io_reg[args[arg_n]]);
-					} else {
+					} else
+					if (instr_set[i].arg_type[arg_n] == AT_CHR) {
+						fprintf(outfile, " %x\t;%c", args[arg_n], args[arg_n]);
+					}
+					else {
 						fprintf(outfile, " %d", args[arg_n]);
 					}
 					arg_n++;
@@ -107,9 +134,8 @@ int main(int argc, char *argv[]) {
 			fprintf(outfile, "DW 0x%04x", instruction & 0xFFFF);
 		}
 		fprintf(outfile, "\n");
-		offset++;
+		pc++;
 	}
-	fprintf(outfile, "          END", offset);
 	fclose(outfile);
 	fclose(source);
 	return 0;
