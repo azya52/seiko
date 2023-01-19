@@ -2,7 +2,7 @@
 
 This is a project to restore of instruction set for Seiko UC-2000 and analogs. The goal of this project is to write first third-party application (even more - first program in more than 30 years) for these early smart watch.
 
-**[Wiki/Emulator 2000](https://github.com/azya52/Emulator2000#readme)**<br />
+**[Emulator 2000](https://github.com/azya52/Emulator2000#readme)**<br />
 Emulator for the UC watch family.
 
 **[Wiki/Instruction Set](https://github.com/azya52/seiko/wiki/Instruction-Set)**<br />
