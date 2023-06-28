@@ -108,19 +108,25 @@ tick:
         LCRB B3
         LARB B0    
         MVCAM RB5, RB6
+
+        CPI RB5, 0
+        JNZ tick_face
+        CPI RB6, 0
+        JZ redraw
+
+tick_face:
         IJMR currentFace
-        JMP tick_face0
-        JMP tick_bigHour
-        JMP tick_bigHourMinute
-        JMP tick_face1
-        JMP tick_face2
-        JMP tick_face3
+        JMP seconds_face0
+        JMP seconds_bigHour
+        JMP 0x98F
+        JMP seconds_face1
+        JMP seconds_face2
+        JMP 0x98F
         JMP 0x190
     
 redraw:
         LCRB B3
         LARB B0    
-        MVCAM RB5, RB6
         PLAI 125                            ;clear
         CALL OS_PRINTZERO0-2                ;screen
         IJMR currentFace
@@ -136,12 +142,6 @@ redraw:
 ;
 ; face big style
 ;
-tick_face0:
-        CPI RB5, 0
-        JNZ seconds_face0
-        CPI RB6, 0
-        JNZ seconds_face0
-        
 redraw_face0:
         ;hours
         MVCA drawValue, RA2
@@ -255,12 +255,6 @@ drawMonth:
 ;
 ; face big hour
 ;
-tick_bigHour:
-        CPI RB5, 0
-        JNZ seconds_bigHour
-        CPI RB6, 0
-        JNZ seconds_bigHour
-        
 redraw_bigHour:
         ;hours
         CALL convert12HEXto24DEC
@@ -325,12 +319,6 @@ drawVeryBigDigit:
 ;
 ; face big hour & minute
 ;
-tick_bigHourMinute:
-        CPI RB5, 0
-        JNZ end_bigHourMinute
-        CPI RB6, 0
-        JNZ end_bigHourMinute
-        
 redraw_bigHourMinute:
         ;hours
         MVCA drawValue, RA2
@@ -353,19 +341,12 @@ redraw_bigHourMinute:
         MVCA drawValue,RA0
         LDI curPosL, 7
         CALL drawVeryBigDigit
-    
-end_bigHourMinute:    
+     
         JMP 0x98F
         
 ;
 ; face BCD
 ;
-tick_face1:
-        CPI RB5, 0
-        JNZ seconds_face1
-        CPI RB6, 0
-        JNZ seconds_face1
-        
 redraw_face1:
         LDI drawBitStyle, 0
         ;hours
@@ -486,12 +467,6 @@ convert12HEXto24DEC:
 ;
 ; face Binary
 ;
-tick_face2:
-        CPI RB5, 0
-        JNZ seconds_face2
-        CPI RB6, 0
-        JNZ seconds_face2
-        
 redraw_face2:
         LDI drawBitStyle, 0
         ;hours
@@ -553,15 +528,10 @@ dec2hex:
     dec2hex_end:
         ADM drawValue, adderM
         RET
+
 ;
 ; face Text Time
 ;
-tick_face3:
-        CPI RB5, 0
-        JNZ redraw_face3_end1
-        CPI RB6, 0
-        JNZ redraw_face3_end1
-        
 redraw_face3:
         PLAI 125                            ;clear
         CALL OS_PRINTZERO0-2                ;screen
@@ -616,7 +586,6 @@ redraw_face3:
         CALL drawDayOfWeek
         CALL OS_PRINT0-6
         
-    redraw_face3_end1:
         JMP 0x98F
     
 drawTextTimeTeens:
